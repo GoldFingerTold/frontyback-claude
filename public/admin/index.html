@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel de administración — FrontyBack (Demo)</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css?v=1">
+<link rel="stylesheet" href="/admin/admin.css?v=1">
+</head>
+<body class="admin-body">
+
+<section id="login-screen" class="login-screen">
+  <form id="login-form" class="login-card">
+    <p class="kicker">Panel privado</p>
+    <h1>FrontyBack — Demo</h1>
+    <p class="login-hint">Ingresá la contraseña de administración para editar el sitio.</p>
+    <input type="password" id="login-password" placeholder="Contraseña" required autofocus>
+    <button type="submit" class="btn btn-primary">Entrar</button>
+    <p class="form-status" id="login-status"></p>
+    <button type="button" id="forgot-toggle" class="link-btn">¿Olvidaste tu contraseña?</button>
+  </form>
+
+  <form id="recover-form" class="login-card" hidden>
+    <p class="kicker">Recuperar acceso</p>
+    <h1>FrontyBack — Demo</h1>
+    <p class="login-hint">
+      Pedí la clave de recuperación a quien configuró el hosting (se carga como variable
+      de entorno <code>ADMIN_RECOVERY_KEY</code>). Al confirmar, la contraseña del panel
+      queda igual a lo que tenga cargado <code>ADMIN_PASSWORD</code> en ese momento.
+    </p>
+    <input type="password" id="recover-key" placeholder="Clave de recuperación" required>
+    <button type="submit" class="btn btn-primary">Restablecer contraseña</button>
+    <p class="form-status" id="recover-status"></p>
+    <button type="button" id="recover-back" class="link-btn">Volver al login</button>
+  </form>
+</section>
+
+<div id="admin-app" class="admin-app" hidden>
+  <header class="admin-header">
+    <div>
+      <p class="kicker">Panel de administración</p>
+      <h1>FrontyBack — Demo</h1>
+    </div>
+    <div class="admin-header-actions">
+      <a href="/" target="_blank" class="btn-ghost">Ver el sitio ↗</a>
+      <button id="logout-btn" class="btn-ghost">Salir</button>
+    </div>
+  </header>
+
+  <nav class="admin-tabs">
+    <button class="admin-tab active" data-tab="textos">Textos</button>
+    <button class="admin-tab" data-tab="fotos">Fotos</button>
+    <button class="admin-tab" data-tab="testimonios">Testimonios</button>
+    <button class="admin-tab" data-tab="redes">Redes sociales</button>
+    <button class="admin-tab" data-tab="mensajes">Mensajes</button>
+    <button class="admin-tab" data-tab="cuenta">Cuenta</button>
+  </nav>
+
+  <main class="admin-main">
+
+    <!-- ---------- TEXTOS ---------- -->
+    <section id="tab-textos" class="admin-panel active">
+      <form id="content-form"></form>
+    </section>
+
+    <!-- ---------- FOTOS ---------- -->
+    <section id="tab-fotos" class="admin-panel">
+      <div class="admin-card">
+        <h2>Próximo evento</h2>
+        <p class="admin-hint">
+          Si lo activás, aparece en la portada del sitio con una foto o video y el texto
+          que pongas (ej: Próximo viernes "Cena show"). Si lo desactivás, la portada queda
+          tal cual, sin esta sección.
+        </p>
+        <form id="proximo-evento-form">
+          <div class="field">
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input type="checkbox" id="pe-enabled" style="width:auto;">
+              Mostrar en el sitio
+            </label>
+          </div>
+          <div class="field">
+            <label for="pe-label">Etiqueta chica (arriba del texto principal)</label>
+            <input type="text" id="pe-label" placeholder="Próximo evento">
+          </div>
+          <div class="field">
+            <label for="pe-text">Texto principal (ej: Próximo viernes "Cena show")</label>
+            <input type="text" id="pe-text">
+          </div>
+          <div class="field">
+            <label for="pe-media-type">Tipo de contenido</label>
+            <select id="pe-media-type">
+              <option value="image">Foto</option>
+              <option value="video">Video (link externo)</option>
+            </select>
+          </div>
+          <div class="field" id="pe-image-block">
+            <label>Foto</label>
+            <div class="image-replace" data-key="proximo_evento_image">
+              <img class="image-preview" alt="Foto del próximo evento">
+              <label class="btn-ghost file-btn">
+                Cambiar imagen
+                <input type="file" accept="image/*" class="image-input">
+              </label>
+            </div>
+          </div>
+          <div class="field" id="pe-video-block" hidden>
+            <label for="pe-video-url">URL del video (formato embed de YouTube, ej: https://www.youtube.com/embed/VIDEOID)</label>
+            <input type="text" id="pe-video-url">
+          </div>
+          <button type="submit" class="btn btn-primary">Guardar próximo evento</button>
+          <p class="form-status" id="pe-status"></p>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <h2>Logo</h2>
+        <p class="admin-hint">Aparece en la barra de navegación arriba de todo el sitio. Subí una imagen recortada sin bordes en blanco de más, para que se vea bien de tamaño chico.</p>
+        <div class="image-replace" data-key="logo_image">
+          <img class="image-preview" alt="Logo actual">
+          <label class="btn-ghost file-btn">
+            Cambiar imagen
+            <input type="file" accept="image/*" class="image-input">
+          </label>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h2>Foto principal (portada)</h2>
+        <p class="admin-hint">Aparece de fondo en la portada del sitio.</p>
+        <div class="image-replace" data-key="banner_image">
+          <img class="image-preview" alt="Portada actual">
+          <label class="btn-ghost file-btn">
+            Cambiar imagen
+            <input type="file" accept="image/*" class="image-input">
+          </label>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h2>Galería del salón</h2>
+        <p class="admin-hint">Subí, borrá o reordená (con las flechas) las fotos que se ven en la sección "El Salón".</p>
+        <label class="btn btn-primary file-btn">
+          Subir foto nueva
+          <input type="file" accept="image/*" id="gallery-upload-input">
+        </label>
+        <div id="gallery-admin-grid" class="gallery-admin-grid"></div>
+      </div>
+    </section>
+
+    <!-- ---------- TESTIMONIOS ---------- -->
+    <section id="tab-testimonios" class="admin-panel">
+      <div class="admin-card">
+        <h2>Cargar un testimonio directamente</h2>
+        <p class="admin-hint">Se publica ya aprobado, sin pasar por la bandeja de pendientes.</p>
+        <form id="testimonial-add-form">
+          <div class="field">
+            <label for="ta-name">Nombre</label>
+            <input type="text" id="ta-name" required>
+          </div>
+          <div class="field">
+            <label for="ta-rating">Puntuación (opcional, 1 a 5)</label>
+            <input type="number" id="ta-rating" min="1" max="5">
+          </div>
+          <div class="field">
+            <label for="ta-text">Texto</label>
+            <textarea id="ta-text" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Agregar y publicar</button>
+          <p class="form-status" id="testimonial-add-status"></p>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <h2>Bandeja de testimonios</h2>
+        <p class="admin-hint">Los pendientes son los que mandó el público desde el sitio - revisalos antes de aprobarlos.</p>
+        <div id="testimonials-admin-list" class="testimonials-admin-list"></div>
+      </div>
+    </section>
+
+    <!-- ---------- REDES ---------- -->
+    <section id="tab-redes" class="admin-panel">
+      <div class="admin-card">
+        <h2>Redes sociales</h2>
+        <p class="admin-hint">Editá el link de cada red, mostrala u ocultala, o agregá una nueva.</p>
+        <div id="social-list" class="social-list"></div>
+        <button id="social-add-btn" class="btn-ghost" type="button">+ Agregar red social</button>
+      </div>
+    </section>
+
+    <!-- ---------- MENSAJES ---------- -->
+    <section id="tab-mensajes" class="admin-panel">
+      <div class="admin-card">
+        <h2>Mensajes de contacto</h2>
+        <p class="admin-hint">Lo que la gente envía desde el formulario de contacto del sitio.</p>
+        <div id="messages-list" class="messages-list"></div>
+      </div>
+    </section>
+
+    <!-- ---------- CUENTA ---------- -->
+    <section id="tab-cuenta" class="admin-panel">
+      <div class="admin-card" style="max-width: 480px;">
+        <h2>Cambiar contraseña</h2>
+        <p class="admin-hint">La vas a necesitar la próxima vez que entres a este panel — guardala en un lugar seguro.</p>
+        <form id="password-form">
+          <div class="field">
+            <label for="pw-current">Contraseña actual</label>
+            <input type="password" id="pw-current" name="currentPassword" required autocomplete="current-password">
+          </div>
+          <div class="field">
+            <label for="pw-new">Contraseña nueva (mínimo 8 caracteres)</label>
+            <input type="password" id="pw-new" name="newPassword" required minlength="8" autocomplete="new-password">
+          </div>
+          <div class="field">
+            <label for="pw-confirm">Repetir contraseña nueva</label>
+            <input type="password" id="pw-confirm" required minlength="8" autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn btn-primary">Cambiar contraseña</button>
+          <p class="form-status" id="password-status"></p>
+        </form>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="/js/config.js?v=1"></script>
+<script src="/admin/admin.js?v=1"></script>
+</body>
+</html>
