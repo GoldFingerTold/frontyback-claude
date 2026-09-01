@@ -4,6 +4,7 @@
 const express = require('express');
 const db = require('../db');
 const asyncHandler = require('../asyncHandler');
+const notifier = require('../email');
 
 const router = express.Router();
 
@@ -42,6 +43,15 @@ router.post('/', asyncHandler(async (req, res) => {
     position: 0,
     created_at: new Date()
   });
+
+  await notifier.notify(
+    `Nuevo testimonio de ${name.trim()} (pendiente de aprobar)`,
+    notifier.renderFields([
+      ['Nombre', name.trim()],
+      ['Puntuación', ratingValue],
+      ['Texto', text.trim()]
+    ])
+  );
 
   res.json({ ok: true });
 }));
