@@ -199,9 +199,10 @@ function renderSocial(items) {
 }
 
 // Acepta un link de YouTube (watch, youtu.be, shorts, o ya embed) o de Instagram (reel o
-// post) y lo devuelve listo para meter en un <iframe> - ambos bloquean mostrar su página
-// normal "incrustada" en otro sitio, así que hace falta el formato /embed/ de cada uno.
-// También devuelve si conviene mostrarlo vertical (Shorts y Reels lo son casi siempre).
+// post). YouTube sí deja mostrar un iframe simple apuntando a /embed/ID. Instagram NO -
+// aunque no tire un error de bloqueo, tiene un script que saca de la ventana a quien lo
+// mira - así que para Instagram hay que usar su widget oficial (embed.js), no un iframe
+// a mano. Por eso acá se devuelve la plataforma además del link ya normalizado.
 function parseVideoUrl(url) {
   if (!url) return null;
   const trimmed = url.trim();
@@ -213,6 +214,7 @@ function parseVideoUrl(url) {
     trimmed.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
   if (match) {
     return {
+      platform: 'youtube',
       embedUrl: `https://www.youtube.com/embed/${match[1]}`,
       vertical: /youtube\.com\/shorts\//.test(trimmed)
     };
@@ -222,12 +224,39 @@ function parseVideoUrl(url) {
   if (match) {
     const [, kind, id] = match;
     return {
-      embedUrl: `https://www.instagram.com/${kind}/${id}/embed`,
+      platform: 'instagram',
+      permalink: `https://www.instagram.com/${kind}/${id}/`,
       vertical: kind === 'reel'
     };
   }
 
   return null;
+}
+
+// El widget oficial de Instagram: un <blockquote> con el link, más su script embed.js
+// que lo transforma en un iframe real - carga el script una sola vez (si ya está
+// cargado, solo hay que pedirle que reprocese los bloques nuevos).
+let instagramScriptPromise = null;
+function loadInstagramEmbedScript() {
+  if (window.instgrm) return Promise.resolve();
+  if (!instagramScriptPromise) {
+    instagramScriptPromise = new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://www.instagram.com/embed.js';
+      script.async = true;
+      script.onload = resolve;
+      document.body.appendChild(script);
+    });
+  }
+  return instagramScriptPromise;
+}
+
+function renderInstagramEmbed(container, permalink) {
+  container.innerHTML =
+    `<blockquote class="instagram-media" data-instgrm-permalink="${permalink}" data-instgrm-version="14"></blockquote>`;
+  loadInstagramEmbedScript().then(() => {
+    if (window.instgrm && window.instgrm.Embeds) window.instgrm.Embeds.process();
+  });
 }
 
 function renderProximoEvento(content) {
@@ -245,13 +274,26 @@ function renderProximoEvento(content) {
   const img = document.getElementById('proximo-evento-image');
   const videoWrap = document.getElementById('proximo-evento-video-wrap');
   const video = document.getElementById('proximo-evento-video');
+  const igWrap = document.getElementById('proximo-evento-instagram');
 
   if (content.proximo_evento_media_type === 'video' && content.proximo_evento_video_url) {
     const parsed = parseVideoUrl(content.proximo_evento_video_url);
     img.hidden = true;
-    video.src = parsed ? parsed.embedUrl : content.proximo_evento_video_url;
+
+    if (parsed && parsed.platform === 'instagram') {
+      video.hidden = true;
+      video.src = '';
+      igWrap.hidden = false;
+      renderInstagramEmbed(igWrap, parsed.permalink);
+    } else {
+      igWrap.hidden = true;
+      igWrap.innerHTML = '';
+      video.hidden = false;
+      video.src = parsed ? parsed.embedUrl : content.proximo_evento_video_url;
+    }
+
     // Vertical si el campo lo tiene tildado (el admin lo puede forzar a mano) O si el
-    // link pegado era de Shorts - no exigimos las dos cosas, porque el campo puede
+    // link pegado era de Shorts/Reel - no exigimos las dos cosas, porque el campo puede
     // haber quedado en su valor por defecto ("0") en contenido cargado antes de que
     // existiera esta casilla.
     const isVertical = content.proximo_evento_vertical === '1' || Boolean(parsed && parsed.vertical);

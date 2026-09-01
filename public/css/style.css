@@ -236,6 +236,10 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 .proximo-evento-media img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
 .video-frame { position: relative; aspect-ratio: 16 / 9; }
 .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+/* El widget de Instagram arma su propio iframe con un ancho fijo por inline style -
+   esto lo recentra y lo deja encoger dentro del marco en vez de desbordar. */
+.instagram-embed-wrap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.instagram-embed-wrap iframe { max-width: 100% !important; }
 /* Video vertical (Reels/Shorts): en vez de aplastarlo en un marco horizontal, se
    angosta y centra dentro del mismo marco - los costados quedan rellenos con el fondo
    de .proximo-evento-media en vez de dejar franjas negras del video. */

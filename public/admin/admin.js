@@ -371,8 +371,9 @@ async function moveGalleryItem(items, index, delta) {
 }
 
 // Acepta un link de YouTube (watch, youtu.be, shorts, o ya embed) o de Instagram (reel o
-// post) y lo devuelve listo para un <iframe> - ambos bloquean mostrar su página normal
-// "incrustada" en otro sitio, así que hace falta el formato /embed/ de cada uno.
+// post). Cada plataforma necesita guardarse distinto: YouTube como link /embed/ (así lo
+// usa un iframe directo), Instagram como su link normal ("permalink" - lo arma su propio
+// widget, ver server/../js/main.js, no un iframe a mano).
 function parseVideoUrl(url) {
   if (!url) return null;
   const trimmed = url.trim();
@@ -384,7 +385,8 @@ function parseVideoUrl(url) {
     trimmed.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
   if (match) {
     return {
-      embedUrl: `https://www.youtube.com/embed/${match[1]}`,
+      platform: 'youtube',
+      storedUrl: `https://www.youtube.com/embed/${match[1]}`,
       vertical: /youtube\.com\/shorts\//.test(trimmed)
     };
   }
@@ -393,7 +395,8 @@ function parseVideoUrl(url) {
   if (match) {
     const [, kind, id] = match;
     return {
-      embedUrl: `https://www.instagram.com/${kind}/${id}/embed`,
+      platform: 'instagram',
+      storedUrl: `https://www.instagram.com/${kind}/${id}/`,
       vertical: kind === 'reel'
     };
   }
@@ -434,7 +437,7 @@ function initProximoEvento(content) {
   videoUrl.addEventListener('blur', () => {
     const parsed = parseVideoUrl(videoUrl.value);
     if (!parsed) return;
-    videoUrl.value = parsed.embedUrl;
+    videoUrl.value = parsed.storedUrl;
     vertical.checked = parsed.vertical;
   });
 
@@ -451,7 +454,7 @@ function initProximoEvento(content) {
           proximo_evento_label: label.value,
           proximo_evento_text: text.value,
           proximo_evento_media_type: mediaType.value,
-          proximo_evento_video_url: parsed ? parsed.embedUrl : videoUrl.value,
+          proximo_evento_video_url: parsed ? parsed.storedUrl : videoUrl.value,
           proximo_evento_vertical: vertical.checked ? '1' : '0'
         })
       });

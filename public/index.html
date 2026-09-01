@@ -60,6 +60,10 @@
         <iframe id="proximo-evento-video" src="" title="Próximo evento" loading="lazy"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen></iframe>
+        <!-- Instagram no permite un iframe simple como YouTube - hace falta su propio
+             widget oficial (embed.js + este bloque especial), que arma el iframe él
+             mismo. Ver renderInstagramEmbed en public/js/main.js. -->
+        <div id="proximo-evento-instagram" class="instagram-embed-wrap" hidden></div>
       </div>
     </div>
     <div class="proximo-evento-copy">
