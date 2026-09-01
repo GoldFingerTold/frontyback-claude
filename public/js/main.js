@@ -198,24 +198,36 @@ function renderSocial(items) {
   }
 }
 
-// Acepta cualquier formato de link de YouTube (watch, youtu.be, shorts, o ya embed) y
-// lo devuelve listo para meter en un <iframe> - YouTube bloquea mostrar la página normal
-// "incrustada" en otro sitio (X-Frame-Options), así que hace falta sí o sí el formato
-// /embed/. También devuelve si el link es de Shorts, para mostrarlo vertical y no
-// aplastado dentro de un marco horizontal.
-function parseYouTubeUrl(url) {
+// Acepta un link de YouTube (watch, youtu.be, shorts, o ya embed) o de Instagram (reel o
+// post) y lo devuelve listo para meter en un <iframe> - ambos bloquean mostrar su página
+// normal "incrustada" en otro sitio, así que hace falta el formato /embed/ de cada uno.
+// También devuelve si conviene mostrarlo vertical (Shorts y Reels lo son casi siempre).
+function parseVideoUrl(url) {
   if (!url) return null;
   const trimmed = url.trim();
-  const match =
+
+  let match =
     trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/) ||
     trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{6,})/) ||
     trimmed.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{6,})/) ||
     trimmed.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
-  if (!match) return null;
-  return {
-    embedUrl: `https://www.youtube.com/embed/${match[1]}`,
-    vertical: /youtube\.com\/shorts\//.test(trimmed)
-  };
+  if (match) {
+    return {
+      embedUrl: `https://www.youtube.com/embed/${match[1]}`,
+      vertical: /youtube\.com\/shorts\//.test(trimmed)
+    };
+  }
+
+  match = trimmed.match(/instagram\.com\/(reel|p)\/([a-zA-Z0-9_-]+)/);
+  if (match) {
+    const [, kind, id] = match;
+    return {
+      embedUrl: `https://www.instagram.com/${kind}/${id}/embed`,
+      vertical: kind === 'reel'
+    };
+  }
+
+  return null;
 }
 
 function renderProximoEvento(content) {
@@ -235,7 +247,7 @@ function renderProximoEvento(content) {
   const video = document.getElementById('proximo-evento-video');
 
   if (content.proximo_evento_media_type === 'video' && content.proximo_evento_video_url) {
-    const parsed = parseYouTubeUrl(content.proximo_evento_video_url);
+    const parsed = parseVideoUrl(content.proximo_evento_video_url);
     img.hidden = true;
     video.src = parsed ? parsed.embedUrl : content.proximo_evento_video_url;
     // Vertical si el campo lo tiene tildado (el admin lo puede forzar a mano) O si el

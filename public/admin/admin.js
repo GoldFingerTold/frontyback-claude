@@ -370,22 +370,35 @@ async function moveGalleryItem(items, index, delta) {
   await loadGalleryAdmin();
 }
 
-// Acepta cualquier formato de link de YouTube (watch, youtu.be, shorts, o ya embed) y
-// lo devuelve listo para un <iframe> - YouTube bloquea mostrar la página normal
-// "incrustada" en otro sitio, así que hace falta sí o sí el formato /embed/.
-function parseYouTubeUrl(url) {
+// Acepta un link de YouTube (watch, youtu.be, shorts, o ya embed) o de Instagram (reel o
+// post) y lo devuelve listo para un <iframe> - ambos bloquean mostrar su página normal
+// "incrustada" en otro sitio, así que hace falta el formato /embed/ de cada uno.
+function parseVideoUrl(url) {
   if (!url) return null;
   const trimmed = url.trim();
-  const match =
+
+  let match =
     trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/) ||
     trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{6,})/) ||
     trimmed.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{6,})/) ||
     trimmed.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
-  if (!match) return null;
-  return {
-    embedUrl: `https://www.youtube.com/embed/${match[1]}`,
-    vertical: /youtube\.com\/shorts\//.test(trimmed)
-  };
+  if (match) {
+    return {
+      embedUrl: `https://www.youtube.com/embed/${match[1]}`,
+      vertical: /youtube\.com\/shorts\//.test(trimmed)
+    };
+  }
+
+  match = trimmed.match(/instagram\.com\/(reel|p)\/([a-zA-Z0-9_-]+)/);
+  if (match) {
+    const [, kind, id] = match;
+    return {
+      embedUrl: `https://www.instagram.com/${kind}/${id}/embed`,
+      vertical: kind === 'reel'
+    };
+  }
+
+  return null;
 }
 
 function initProximoEvento(content) {
@@ -419,7 +432,7 @@ function initProximoEvento(content) {
   // tildamos "vertical" solo si detectamos que es un Shorts - así el cliente no tiene
   // que saber qué es un link "embed".
   videoUrl.addEventListener('blur', () => {
-    const parsed = parseYouTubeUrl(videoUrl.value);
+    const parsed = parseVideoUrl(videoUrl.value);
     if (!parsed) return;
     videoUrl.value = parsed.embedUrl;
     vertical.checked = parsed.vertical;
@@ -429,7 +442,7 @@ function initProximoEvento(content) {
     e.preventDefault();
     status.textContent = 'Guardando...';
     status.className = 'form-status';
-    const parsed = parseYouTubeUrl(videoUrl.value);
+    const parsed = parseVideoUrl(videoUrl.value);
     try {
       await api('/api/admin/content', {
         method: 'PUT',
