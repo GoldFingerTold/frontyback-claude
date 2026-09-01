@@ -370,12 +370,31 @@ async function moveGalleryItem(items, index, delta) {
   await loadGalleryAdmin();
 }
 
+// Acepta cualquier formato de link de YouTube (watch, youtu.be, shorts, o ya embed) y
+// lo devuelve listo para un <iframe> - YouTube bloquea mostrar la página normal
+// "incrustada" en otro sitio, así que hace falta sí o sí el formato /embed/.
+function parseYouTubeUrl(url) {
+  if (!url) return null;
+  const trimmed = url.trim();
+  const match =
+    trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/) ||
+    trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{6,})/) ||
+    trimmed.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{6,})/) ||
+    trimmed.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
+  if (!match) return null;
+  return {
+    embedUrl: `https://www.youtube.com/embed/${match[1]}`,
+    vertical: /youtube\.com\/shorts\//.test(trimmed)
+  };
+}
+
 function initProximoEvento(content) {
   const enabled = document.getElementById('pe-enabled');
   const label = document.getElementById('pe-label');
   const text = document.getElementById('pe-text');
   const mediaType = document.getElementById('pe-media-type');
   const videoUrl = document.getElementById('pe-video-url');
+  const vertical = document.getElementById('pe-vertical');
   const imageBlock = document.getElementById('pe-image-block');
   const videoBlock = document.getElementById('pe-video-block');
   const form = document.getElementById('proximo-evento-form');
@@ -386,6 +405,7 @@ function initProximoEvento(content) {
   text.value = content.proximo_evento_text || '';
   mediaType.value = content.proximo_evento_media_type || 'image';
   videoUrl.value = content.proximo_evento_video_url || '';
+  vertical.checked = content.proximo_evento_vertical === '1';
 
   function toggleMediaBlocks() {
     const isVideo = mediaType.value === 'video';
@@ -395,10 +415,21 @@ function initProximoEvento(content) {
   toggleMediaBlocks();
   mediaType.onchange = toggleMediaBlocks;
 
+  // Al pegar cualquier link de YouTube, lo dejamos en formato embed automáticamente y
+  // tildamos "vertical" solo si detectamos que es un Shorts - así el cliente no tiene
+  // que saber qué es un link "embed".
+  videoUrl.addEventListener('blur', () => {
+    const parsed = parseYouTubeUrl(videoUrl.value);
+    if (!parsed) return;
+    videoUrl.value = parsed.embedUrl;
+    vertical.checked = parsed.vertical;
+  });
+
   form.onsubmit = async (e) => {
     e.preventDefault();
     status.textContent = 'Guardando...';
     status.className = 'form-status';
+    const parsed = parseYouTubeUrl(videoUrl.value);
     try {
       await api('/api/admin/content', {
         method: 'PUT',
@@ -407,7 +438,8 @@ function initProximoEvento(content) {
           proximo_evento_label: label.value,
           proximo_evento_text: text.value,
           proximo_evento_media_type: mediaType.value,
-          proximo_evento_video_url: videoUrl.value
+          proximo_evento_video_url: parsed ? parsed.embedUrl : videoUrl.value,
+          proximo_evento_vertical: vertical.checked ? '1' : '0'
         })
       });
       status.textContent = 'Guardado ✓';

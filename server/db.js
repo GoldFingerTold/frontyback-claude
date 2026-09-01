@@ -80,6 +80,7 @@ const DEFAULT_CONTENT = {
   proximo_evento_media_type: 'image',
   proximo_evento_image: '',
   proximo_evento_video_url: '',
+  proximo_evento_vertical: '0',
 
   testimonios_heading: 'Testimonios',
   testimonios_subheading: 'Lo que dicen tus clientes',

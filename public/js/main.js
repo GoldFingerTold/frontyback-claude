@@ -198,6 +198,26 @@ function renderSocial(items) {
   }
 }
 
+// Acepta cualquier formato de link de YouTube (watch, youtu.be, shorts, o ya embed) y
+// lo devuelve listo para meter en un <iframe> - YouTube bloquea mostrar la página normal
+// "incrustada" en otro sitio (X-Frame-Options), así que hace falta sí o sí el formato
+// /embed/. También devuelve si el link es de Shorts, para mostrarlo vertical y no
+// aplastado dentro de un marco horizontal.
+function parseYouTubeUrl(url) {
+  if (!url) return null;
+  const trimmed = url.trim();
+  const match =
+    trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]{6,})/) ||
+    trimmed.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{6,})/) ||
+    trimmed.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{6,})/) ||
+    trimmed.match(/[?&]v=([a-zA-Z0-9_-]{6,})/);
+  if (!match) return null;
+  return {
+    embedUrl: `https://www.youtube.com/embed/${match[1]}`,
+    vertical: /youtube\.com\/shorts\//.test(trimmed)
+  };
+}
+
 function renderProximoEvento(content) {
   const section = document.getElementById('proximo-evento');
   if (!section) return;
@@ -215,8 +235,15 @@ function renderProximoEvento(content) {
   const video = document.getElementById('proximo-evento-video');
 
   if (content.proximo_evento_media_type === 'video' && content.proximo_evento_video_url) {
+    const parsed = parseYouTubeUrl(content.proximo_evento_video_url);
     img.hidden = true;
-    video.src = content.proximo_evento_video_url;
+    video.src = parsed ? parsed.embedUrl : content.proximo_evento_video_url;
+    // Vertical si el campo lo tiene tildado (el admin lo puede forzar a mano) O si el
+    // link pegado era de Shorts - no exigimos las dos cosas, porque el campo puede
+    // haber quedado en su valor por defecto ("0") en contenido cargado antes de que
+    // existiera esta casilla.
+    const isVertical = content.proximo_evento_vertical === '1' || Boolean(parsed && parsed.vertical);
+    videoWrap.classList.toggle('vertical', isVertical);
     videoWrap.hidden = false;
   } else if (content.proximo_evento_image) {
     videoWrap.hidden = true;

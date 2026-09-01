@@ -108,8 +108,13 @@
             </div>
           </div>
           <div class="field" id="pe-video-block" hidden>
-            <label for="pe-video-url">URL del video (formato embed de YouTube, ej: https://www.youtube.com/embed/VIDEOID)</label>
-            <input type="text" id="pe-video-url">
+            <label for="pe-video-url">Link del video de YouTube (cualquier formato: el normal, el de Shorts, o el corto youtu.be - se acomoda solo)</label>
+            <input type="text" id="pe-video-url" placeholder="https://www.youtube.com/watch?v=... o .../shorts/...">
+            <label style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+              <input type="checkbox" id="pe-vertical" style="width:auto;">
+              Es un video vertical (Reels/Shorts/TikTok)
+            </label>
+            <p class="admin-hint" style="margin-top:4px;">Se marca solo si pegás un link de Shorts, pero podés tildarlo/destildarlo a mano si hace falta.</p>
           </div>
           <button type="submit" class="btn btn-primary">Guardar próximo evento</button>
           <p class="form-status" id="pe-status"></p>
