@@ -55,6 +55,13 @@ const FIELD_GROUPS = [
     ]
   },
   {
+    title: 'Productos (la sección del QR en la portada)',
+    fields: [
+      { key: 'productos_heading', label: 'Título', type: 'text' },
+      { key: 'productos_subheading', label: 'Antetítulo', type: 'text' }
+    ]
+  },
+  {
     title: 'Testimonios (textos de la sección)',
     fields: [
       { key: 'testimonios_heading', label: 'Título', type: 'text' },

@@ -77,6 +77,9 @@ const DEFAULT_CONTENT = {
   salon_subheading: 'Así se muestran tus fotos',
   salon_text: 'Esta sección es para contar tu salón o local. Las fotos de abajo se suben, borran y reordenan desde el panel en segundos - probalo vos mismo en la demo.',
 
+  productos_heading: 'Nuestros productos y precios',
+  productos_subheading: 'Escaneá para ver',
+
   proximo_evento_enabled: '0',
   proximo_evento_label: '',
   proximo_evento_text: '',

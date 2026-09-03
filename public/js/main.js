@@ -486,6 +486,9 @@ async function loadSite() {
   setText('salon-subheading', content.salon_subheading);
   setText('salon-text', content.salon_text);
 
+  setText('productos-heading', content.productos_heading);
+  setText('productos-subheading', content.productos_subheading);
+
   setText('testimonios-heading', content.testimonios_heading);
   setText('testimonios-subheading', content.testimonios_subheading);
   setText('testimonios-form-heading', content.testimonios_form_heading);
