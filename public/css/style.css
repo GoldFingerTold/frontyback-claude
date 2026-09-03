@@ -309,6 +309,32 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 @media (max-width: 900px) { .gallery { grid-template-columns: repeat(3, 1fr); gap: 12px; } }
 @media (max-width: 560px) { .gallery { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
 
+/* ---------- Sección del QR en la portada (distinto de la página /productos en sí) ---------- */
+
+.productos-qr-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  flex-wrap: wrap;
+  text-align: left;
+}
+.productos-qr-copy { max-width: 420px; }
+.productos-qr-image {
+  width: 180px;
+  height: 180px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 10px;
+  box-shadow: var(--shadow-card);
+  flex-shrink: 0;
+}
+@media (max-width: 640px) {
+  .productos-qr-inner { flex-direction: column; text-align: center; }
+  .productos-qr-copy { max-width: 100%; }
+}
+
 /* ---------- Productos (página /productos, la que abre el QR) ---------- */
 
 .productos-hero {

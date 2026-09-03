@@ -682,7 +682,7 @@ async function moveSocialItem(items, index, delta) {
 // ---------- Productos ----------
 
 async function loadProductosTab() {
-  document.getElementById('qr-preview').src = '/api/admin/products/qr';
+  document.getElementById('qr-preview').src = '/api/products/qr';
 
   await renderCategoriesList();
 

@@ -1,11 +1,24 @@
 // Ruta pública: la lista de categorías con sus productos/precios, para la página
-// /productos (a la que apunta el QR que se descarga desde el panel).
+// /productos (a la que apunta el QR), y el QR en sí (público a propósito: se muestra en
+// la página principal para quien lo quiera escanear, así que no puede vivir detrás del
+// login de admin - si viviera ahí, un visitante sin sesión ni lo vería).
 
 const express = require('express');
+const QRCode = require('qrcode');
 const db = require('../db');
 const asyncHandler = require('../asyncHandler');
 
 const router = express.Router();
+
+// Código QR (PNG) que apunta a esta misma página /productos - se arma la URL desde el
+// propio request, así funciona igual en local, en Render o en cualquier dominio sin
+// tener que hardcodear nada.
+router.get('/qr', asyncHandler(async (req, res) => {
+  const url = `${req.protocol}://${req.get('host')}/productos`;
+  const buffer = await QRCode.toBuffer(url, { width: 600, margin: 2 });
+  res.set('Content-Type', 'image/png');
+  res.send(buffer);
+}));
 
 router.get('/', asyncHandler(async (req, res) => {
   const mongo = db.getDb();

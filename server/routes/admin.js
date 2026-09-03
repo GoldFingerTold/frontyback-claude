@@ -4,7 +4,6 @@
 
 const express = require('express');
 const multer = require('multer');
-const QRCode = require('qrcode');
 const db = require('../db');
 const asyncHandler = require('../asyncHandler');
 const { uploadBuffer } = require('../cloudinary');
@@ -460,17 +459,9 @@ router.delete('/products/:id', asyncHandler(async (req, res) => {
   res.json({ ok: true });
 }));
 
-// Código QR (PNG) que apunta a la página pública /productos de este mismo sitio - se
-// arma la URL desde el propio request, así funciona igual en local, en Render o en
-// cualquier dominio sin tener que hardcodear nada. Sin Content-Disposition a propósito:
-// así sirve tanto para mostrarlo en el panel (<img src>) como para descargarlo (el link
-// del panel usa el atributo download del lado del navegador).
-router.get('/products/qr', asyncHandler(async (req, res) => {
-  const url = `${req.protocol}://${req.get('host')}/productos`;
-  const buffer = await QRCode.toBuffer(url, { width: 600, margin: 2 });
-  res.set('Content-Type', 'image/png');
-  res.send(buffer);
-}));
+// El QR en sí vive en la ruta pública (server/routes/products.js), no acá - tiene que
+// poder verlo cualquier visitante sin sesión, ya que se muestra también en la página
+// principal del sitio.
 
 // ---------- Reset de la demo ----------
 
