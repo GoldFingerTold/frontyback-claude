@@ -119,6 +119,7 @@ function showApp() {
   loadFotosTab();
   loadTestimoniosTab();
   loadRedesTab();
+  loadProductosTab();
   loadMensajesTab();
   initPasswordForm();
 }
@@ -676,6 +677,258 @@ async function moveSocialItem(items, index, delta) {
   [order[index], order[newIndex]] = [order[newIndex], order[index]];
   await api('/api/admin/social/reorder', { method: 'PUT', body: JSON.stringify({ order }) });
   await renderSocialList();
+}
+
+// ---------- Productos ----------
+
+async function loadProductosTab() {
+  document.getElementById('qr-preview').src = '/api/admin/products/qr';
+
+  await renderCategoriesList();
+
+  document.getElementById('category-add-form').onsubmit = async (e) => {
+    e.preventDefault();
+    const input = document.getElementById('category-name-input');
+    const name = input.value.trim();
+    if (!name) return;
+    await api('/api/admin/product-categories', { method: 'POST', body: JSON.stringify({ name }) });
+    input.value = '';
+    await renderCategoriesList();
+  };
+}
+
+async function renderCategoriesList() {
+  const list = document.getElementById('categories-list');
+  const [{ items: categories }, { items: allProducts }] = await Promise.all([
+    api('/api/admin/product-categories'),
+    api('/api/admin/products')
+  ]);
+
+  if (categories.length === 0) {
+    list.innerHTML = '<p class="empty-state">Todavía no hay categorías - agregá la primera arriba.</p>';
+    return;
+  }
+
+  list.innerHTML = '';
+  categories.forEach((cat, catIndex) => {
+    const catProducts = allProducts.filter((p) => String(p.categoryId) === String(cat.id));
+
+    const card = document.createElement('div');
+    card.className = 'category-card';
+
+    const header = document.createElement('div');
+    header.className = 'category-card-header';
+
+    const orderBtns = document.createElement('div');
+    orderBtns.className = 'order-btns';
+    const catUp = document.createElement('button');
+    catUp.type = 'button';
+    catUp.textContent = '↑';
+    catUp.disabled = catIndex === 0;
+    catUp.onclick = () => moveCategoryItem(categories, catIndex, -1);
+    const catDown = document.createElement('button');
+    catDown.type = 'button';
+    catDown.textContent = '↓';
+    catDown.disabled = catIndex === categories.length - 1;
+    catDown.onclick = () => moveCategoryItem(categories, catIndex, 1);
+    orderBtns.appendChild(catUp);
+    orderBtns.appendChild(catDown);
+
+    const nameInput = document.createElement('input');
+    nameInput.type = 'text';
+    nameInput.value = cat.name;
+    nameInput.className = 'category-name-input';
+
+    const saveBtn = document.createElement('button');
+    saveBtn.type = 'button';
+    saveBtn.className = 'icon-btn';
+    saveBtn.title = 'Guardar nombre';
+    saveBtn.textContent = '💾';
+    saveBtn.onclick = async () => {
+      await api(`/api/admin/product-categories/${cat.id}`, { method: 'PUT', body: JSON.stringify({ name: nameInput.value }) });
+      saveBtn.textContent = '✓';
+      setTimeout(() => (saveBtn.textContent = '💾'), 1200);
+    };
+
+    const delBtn = document.createElement('button');
+    delBtn.type = 'button';
+    delBtn.className = 'icon-btn danger';
+    delBtn.title = 'Borrar categoría';
+    delBtn.textContent = '🗑';
+    delBtn.onclick = async () => {
+      if (!confirm(`¿Borrar la categoría "${cat.name}" y todos sus productos?`)) return;
+      await api(`/api/admin/product-categories/${cat.id}`, { method: 'DELETE' });
+      await renderCategoriesList();
+    };
+
+    header.appendChild(orderBtns);
+    header.appendChild(nameInput);
+    header.appendChild(saveBtn);
+    header.appendChild(delBtn);
+    card.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.className = 'products-admin-grid';
+    catProducts.forEach((p, pIndex) => grid.appendChild(renderProductAdminItem(p, catProducts, pIndex)));
+    if (catProducts.length === 0) {
+      const empty = document.createElement('p');
+      empty.className = 'empty-state';
+      empty.textContent = 'Sin productos todavía.';
+      grid.appendChild(empty);
+    }
+    card.appendChild(grid);
+
+    const addForm = document.createElement('form');
+    addForm.className = 'inline-form product-add-form';
+    const nameField = document.createElement('input');
+    nameField.type = 'text';
+    nameField.placeholder = 'Nombre del producto';
+    nameField.required = true;
+    const priceField = document.createElement('input');
+    priceField.type = 'text';
+    priceField.placeholder = 'Precio (ej: $150.000)';
+    const addBtn = document.createElement('button');
+    addBtn.type = 'submit';
+    addBtn.className = 'btn-ghost';
+    addBtn.textContent = '+ Agregar producto';
+    addForm.appendChild(nameField);
+    addForm.appendChild(priceField);
+    addForm.appendChild(addBtn);
+    addForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const name = nameField.value.trim();
+      if (!name) return;
+      await api('/api/admin/products', {
+        method: 'POST',
+        body: JSON.stringify({ category_id: cat.id, name, price: priceField.value.trim() })
+      });
+      await renderCategoriesList();
+    };
+    card.appendChild(addForm);
+
+    list.appendChild(card);
+  });
+}
+
+function renderProductAdminItem(p, catProducts, pIndex) {
+  const item = document.createElement('div');
+  item.className = 'product-admin-item';
+
+  const imgWrap = document.createElement('div');
+  imgWrap.className = 'product-admin-image';
+  const img = document.createElement('img');
+  img.src = resolveImageUrl(p.image) || '';
+  img.hidden = !p.image;
+  imgWrap.appendChild(img);
+
+  const uploadLabel = document.createElement('label');
+  uploadLabel.className = 'btn-ghost file-btn small';
+  uploadLabel.textContent = p.image ? 'Cambiar foto' : 'Subir foto';
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.onchange = async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('productId', p.id);
+    try {
+      const data = await api('/api/admin/products/image', { method: 'POST', body: formData });
+      img.src = resolveImageUrl(data.url);
+      img.hidden = false;
+      uploadLabel.childNodes[0].textContent = 'Cambiar foto';
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      fileInput.value = '';
+    }
+  };
+  uploadLabel.appendChild(fileInput);
+  imgWrap.appendChild(uploadLabel);
+  item.appendChild(imgWrap);
+
+  const fields = document.createElement('div');
+  fields.className = 'product-admin-fields';
+  const nameInput = document.createElement('input');
+  nameInput.type = 'text';
+  nameInput.value = p.name;
+  nameInput.placeholder = 'Nombre';
+  const priceInput = document.createElement('input');
+  priceInput.type = 'text';
+  priceInput.value = p.price || '';
+  priceInput.placeholder = 'Precio';
+  fields.appendChild(nameInput);
+  fields.appendChild(priceInput);
+  item.appendChild(fields);
+
+  const actions = document.createElement('div');
+  actions.className = 'product-admin-actions';
+
+  const orderBtns = document.createElement('div');
+  orderBtns.className = 'order-btns';
+  const upBtn = document.createElement('button');
+  upBtn.type = 'button';
+  upBtn.textContent = '↑';
+  upBtn.disabled = pIndex === 0;
+  upBtn.onclick = () => moveProductItem(catProducts, pIndex, -1);
+  const downBtn = document.createElement('button');
+  downBtn.type = 'button';
+  downBtn.textContent = '↓';
+  downBtn.disabled = pIndex === catProducts.length - 1;
+  downBtn.onclick = () => moveProductItem(catProducts, pIndex, 1);
+  orderBtns.appendChild(upBtn);
+  orderBtns.appendChild(downBtn);
+
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'icon-btn';
+  saveBtn.title = 'Guardar';
+  saveBtn.textContent = '💾';
+  saveBtn.onclick = async () => {
+    await api(`/api/admin/products/${p.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({ name: nameInput.value, price: priceInput.value })
+    });
+    saveBtn.textContent = '✓';
+    setTimeout(() => (saveBtn.textContent = '💾'), 1200);
+  };
+
+  const delBtn = document.createElement('button');
+  delBtn.type = 'button';
+  delBtn.className = 'icon-btn danger';
+  delBtn.title = 'Borrar';
+  delBtn.textContent = '🗑';
+  delBtn.onclick = async () => {
+    if (!confirm(`¿Borrar "${p.name}"?`)) return;
+    await api(`/api/admin/products/${p.id}`, { method: 'DELETE' });
+    await renderCategoriesList();
+  };
+
+  actions.appendChild(orderBtns);
+  actions.appendChild(saveBtn);
+  actions.appendChild(delBtn);
+  item.appendChild(actions);
+
+  return item;
+}
+
+async function moveCategoryItem(categories, index, delta) {
+  const newIndex = index + delta;
+  if (newIndex < 0 || newIndex >= categories.length) return;
+  const order = categories.map((c) => c.id);
+  [order[index], order[newIndex]] = [order[newIndex], order[index]];
+  await api('/api/admin/product-categories/reorder', { method: 'PUT', body: JSON.stringify({ order }) });
+  await renderCategoriesList();
+}
+
+async function moveProductItem(products, index, delta) {
+  const newIndex = index + delta;
+  if (newIndex < 0 || newIndex >= products.length) return;
+  const order = products.map((p) => p.id);
+  [order[index], order[newIndex]] = [order[newIndex], order[index]];
+  await api('/api/admin/products/reorder', { method: 'PUT', body: JSON.stringify({ order }) });
+  await renderCategoriesList();
 }
 
 // ---------- Mensajes ----------

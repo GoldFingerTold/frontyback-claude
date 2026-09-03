@@ -37,6 +37,8 @@ async function ensureIndexes() {
   await db.collection('social_links').createIndex({ position: 1 });
   await db.collection('testimonials').createIndex({ status: 1, position: 1 });
   await db.collection('contact_messages').createIndex({ created_at: -1 });
+  await db.collection('product_categories').createIndex({ position: 1 });
+  await db.collection('products').createIndex({ category_id: 1, position: 1 });
 }
 
 // --- Contenido semilla de la demo (sin fotos ni datos de ningún cliente real) ---
@@ -48,6 +50,7 @@ const DEFAULT_CONTENT = {
   nav_home_label: 'Inicio',
   nav_servicios_label: 'Servicios',
   nav_salon_label: 'Tu Espacio',
+  nav_productos_label: 'Productos',
   nav_testimonios_label: 'Testimonios',
   nav_contacto_label: 'Contacto',
 
@@ -100,6 +103,26 @@ const DEFAULT_CONTENT = {
 const DEFAULT_SOCIAL = [];
 const DEFAULT_GALLERY = [];
 
+// Categorías y productos de ejemplo para la página /productos - a diferencia del resto
+// del contenido (vacío a propósito), acá conviene mostrar algo cargado: es lo que se ve
+// al escanear el QR en el pitch, y una lista vacía no dice nada.
+const DEFAULT_PRODUCT_CATEGORIES = [
+  {
+    name: 'Paquete para 50 personas',
+    products: [
+      { name: 'Menú clásico + brindis', price: 'Desde $150.000' },
+      { name: 'Menú premium + barra libre', price: 'Desde $220.000' }
+    ]
+  },
+  {
+    name: 'Paquete para 100 personas',
+    products: [
+      { name: 'Menú clásico + brindis', price: 'Desde $280.000' },
+      { name: 'Menú premium + barra libre', price: 'Desde $410.000' }
+    ]
+  }
+];
+
 async function seedIfEmpty() {
   const contentDoc = await db.collection('content').findOne({ _id: 'main' });
   if (!contentDoc) {
@@ -128,6 +151,19 @@ async function seedIfEmpty() {
     );
   }
 
+  const categoryCount = await db.collection('product_categories').countDocuments();
+  if (categoryCount === 0) {
+    for (let i = 0; i < DEFAULT_PRODUCT_CATEGORIES.length; i++) {
+      const { name, products } = DEFAULT_PRODUCT_CATEGORIES[i];
+      const { insertedId } = await db.collection('product_categories').insertOne({ name, position: i });
+      if (products.length > 0) {
+        await db.collection('products').insertMany(
+          products.map((p, j) => ({ ...p, category_id: insertedId, image_url: '', position: j }))
+        );
+      }
+    }
+  }
+
   const adminDoc = await db.collection('admin_user').findOne({ _id: 'admin' });
   if (!adminDoc) {
     const password = process.env.ADMIN_PASSWORD || 'cambiar-esta-clave';
@@ -151,6 +187,9 @@ async function resetDemo() {
   await db.collection('gallery_images').deleteMany({});
   await db.collection('social_links').deleteMany({});
   await db.collection('testimonials').deleteMany({});
+  await db.collection('product_categories').deleteMany({});
+  await db.collection('products').deleteMany({});
+  await seedIfEmpty();
 }
 
 module.exports = { connect, getDb, ObjectId, resetDemo };

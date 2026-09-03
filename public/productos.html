@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Productos — Demo FrontyBack</title>
+<meta name="description" content="Lista de productos y precios.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/style.css?v=1">
+</head>
+<body>
+
+<div class="demo-ribbon">Sitio de demostración — <a href="https://frontyback.com" target="_blank" rel="noopener">frontyback.com</a></div>
+
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-brand" id="nav-brand">
+      <img src="" alt="" class="nav-logo" id="nav-logo" hidden>
+      <span class="nav-brand-text" id="nav-brand-text"></span>
+    </a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="/#top" data-nav-label="nav_home_label">Inicio</a></li>
+      <li><a href="/#servicios" data-nav-label="nav_servicios_label">Servicios</a></li>
+      <li><a href="/#salon" data-nav-label="nav_salon_label">El Salón</a></li>
+      <li><a href="/productos" data-nav-label="nav_productos_label" class="nav-cta">Productos</a></li>
+      <li><a href="/#contacto" data-nav-label="nav_contacto_label">Contacto</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="productos-hero">
+  <div class="section-inner">
+    <p class="kicker">Productos y precios</p>
+    <h1 class="section-title" id="productos-title">Nuestros productos</h1>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="section-inner">
+      <div id="productos-list"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-brand" id="footer-brand"></p>
+    <p class="copyright"><span id="footer-text"></span> · <span id="footer-year"></span></p>
+  </div>
+</footer>
+
+<script src="/js/config.js?v=1"></script>
+<script src="/js/productos.js?v=1"></script>
+</body>
+</html>

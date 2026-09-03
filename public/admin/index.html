@@ -55,6 +55,7 @@
     <button class="admin-tab" data-tab="fotos">Fotos</button>
     <button class="admin-tab" data-tab="testimonios">Testimonios</button>
     <button class="admin-tab" data-tab="redes">Redes sociales</button>
+    <button class="admin-tab" data-tab="productos">Productos</button>
     <button class="admin-tab" data-tab="mensajes">Mensajes</button>
     <button class="admin-tab" data-tab="cuenta">Cuenta</button>
   </nav>
@@ -193,6 +194,31 @@
         <p class="admin-hint">Editá el link de cada red, mostrala u ocultala, o agregá una nueva.</p>
         <div id="social-list" class="social-list"></div>
         <button id="social-add-btn" class="btn-ghost" type="button">+ Agregar red social</button>
+      </div>
+    </section>
+
+    <!-- ---------- PRODUCTOS ---------- -->
+    <section id="tab-productos" class="admin-panel">
+      <div class="admin-card">
+        <h2>Código QR</h2>
+        <p class="admin-hint">
+          Apunta a la página pública <code>/productos</code> con todo lo que cargues acá
+          abajo. Imprimilo o mostralo desde una tablet en el evento/local.
+        </p>
+        <div class="qr-preview-wrap">
+          <img id="qr-preview" alt="Código QR de la página de productos" class="qr-preview">
+          <a id="qr-download" href="/api/admin/products/qr" download="qr-productos.png" class="btn btn-primary">Descargar QR</a>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h2>Categorías</h2>
+        <p class="admin-hint">Cada categoría agrupa sus propios productos (ej. "Paquete para 50 personas").</p>
+        <form id="category-add-form" class="inline-form">
+          <input type="text" id="category-name-input" placeholder="Nombre de la categoría nueva" required>
+          <button type="submit" class="btn btn-primary">+ Agregar categoría</button>
+        </form>
+        <div id="categories-list" class="categories-list"></div>
       </div>
     </section>
 
