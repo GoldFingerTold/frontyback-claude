@@ -280,6 +280,29 @@ async function loadFotosTab() {
     const preview = el.querySelector('.image-preview');
     preview.src = resolveImageUrl(content[key]) || '';
 
+    // "Quitar imagen": vuelve el campo a vacío - hace falta para poder volver al
+    // valor por defecto (ej. el isotipo propio de FrontyBack) después de haber subido
+    // uno personalizado, ya que "Cambiar imagen" por sí sola no ofrece forma de borrar.
+    let removeBtn = el.querySelector('.image-remove-btn');
+    if (!removeBtn) {
+      removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'btn-ghost image-remove-btn';
+      removeBtn.textContent = 'Quitar imagen';
+      el.appendChild(removeBtn);
+    }
+    removeBtn.hidden = !content[key];
+    removeBtn.onclick = async () => {
+      if (!confirm('¿Quitar esta imagen y volver al valor por defecto?')) return;
+      try {
+        await api('/api/admin/content', { method: 'PUT', body: JSON.stringify({ [key]: '' }) });
+        preview.src = '';
+        removeBtn.hidden = true;
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
     const input = el.querySelector('.image-input');
     input.onchange = async () => {
       const file = input.files[0];
@@ -290,6 +313,7 @@ async function loadFotosTab() {
       try {
         const data = await api('/api/admin/content/image', { method: 'POST', body: formData });
         preview.src = resolveImageUrl(data.url);
+        removeBtn.hidden = false;
       } catch (err) {
         alert(err.message);
       } finally {
