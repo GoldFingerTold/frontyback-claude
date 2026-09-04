@@ -143,7 +143,10 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 
 .nav {
   position: fixed;
-  top: 18px;
+  /* 46px y no 18px: hay que dejar lugar para el cartel negro ".demo-ribbon" de arriba
+     de todo (solo existe en este sitio demo, no en los sitios de clientes) - con 18px
+     el nav tapaba la mitad del cartel y quedaba un resto de franja negra asomando. */
+  top: 46px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
