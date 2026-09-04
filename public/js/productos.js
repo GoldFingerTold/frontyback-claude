@@ -20,17 +20,12 @@ function setText(id, value) {
 function renderBrand(content) {
   const logo = document.getElementById('nav-logo');
   const brandText = document.getElementById('nav-brand-text');
-  if (content.logo_image) {
-    logo.src = resolveImageUrl(content.logo_image);
-    logo.alt = content.site_name || '';
-    logo.hidden = false;
-    if (brandText) brandText.hidden = true;
-  } else {
-    logo.hidden = true;
-    if (brandText) {
-      brandText.textContent = content.site_name || '';
-      brandText.hidden = false;
-    }
+  logo.src = resolveImageUrl(content.logo_image || '/img/logo.svg');
+  logo.alt = content.site_name || '';
+  logo.hidden = false;
+  if (brandText) {
+    brandText.textContent = content.site_name || '';
+    brandText.hidden = false;
   }
 }
 

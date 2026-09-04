@@ -155,8 +155,8 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
 }
 
 .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px 8px 28px; }
-.nav-brand { display: flex; align-items: center; }
-.nav-logo { height: 52px; width: auto; display: block; }
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-logo { height: 40px; width: auto; display: block; }
 
 @media (max-width: 920px) {
   .nav-logo { height: 42px; }

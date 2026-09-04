@@ -94,22 +94,18 @@ function renderGallery(items) {
   });
 }
 
-// Logo si hay uno cargado, o el nombre del sitio como texto si todavía no se subió
-// ninguno - así la demo se ve prolija desde el primer segundo, sin logo roto.
+// A diferencia de un sitio de cliente (donde sin logo propio conviene mostrar solo el
+// nombre en texto), FrontyBack sí tiene marca fija: si no hay logo_image cargado en el
+// panel, cae en el isotipo real de FrontyBack (/img/logo.svg) en vez de texto pelado.
 function renderBrand(content) {
   const logo = document.getElementById('nav-logo');
   const brandText = document.getElementById('nav-brand-text');
-  if (content.logo_image) {
-    logo.src = resolveImageUrl(content.logo_image);
-    logo.alt = content.site_name || '';
-    logo.hidden = false;
-    if (brandText) brandText.hidden = true;
-  } else {
-    logo.hidden = true;
-    if (brandText) {
-      brandText.textContent = content.site_name || '';
-      brandText.hidden = false;
-    }
+  logo.src = resolveImageUrl(content.logo_image || '/img/logo.svg');
+  logo.alt = content.site_name || '';
+  logo.hidden = false;
+  if (brandText) {
+    brandText.textContent = content.site_name || '';
+    brandText.hidden = false;
   }
 }
 
