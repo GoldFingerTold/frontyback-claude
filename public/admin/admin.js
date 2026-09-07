@@ -128,6 +128,7 @@ function showApp() {
   loadRedesTab();
   loadProductosTab();
   loadMensajesTab();
+  loadClientesTab();
   initPasswordForm();
 }
 
@@ -1020,6 +1021,215 @@ function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str || '';
   return div.innerHTML;
+}
+
+// ---------- Clientes (seguimiento comercial, herramienta interna de Hugo) ----------
+// No tiene nada que ver con la demo que ve el prospecto - es donde Hugo anota a quién le
+// vendió o le está por vender un sitio, con embudo de estados y bitácora de seguimiento.
+
+const CLIENT_STATUS_LABELS = {
+  prospecto: 'Prospecto',
+  contactado: 'Contactado',
+  presupuestado: 'Presupuestado',
+  contratado: 'Contratado',
+  en_desarrollo: 'En desarrollo',
+  entregado: 'Entregado',
+  mantenimiento: 'Mantenimiento'
+};
+
+async function loadClientesTab() {
+  await renderClientesTab();
+
+  const addForm = document.getElementById('cliente-add-form');
+  addForm.onsubmit = async (e) => {
+    e.preventDefault();
+    const status = document.getElementById('cliente-add-status');
+    status.textContent = '';
+    try {
+      await api('/api/admin/clients', {
+        method: 'POST',
+        body: JSON.stringify({
+          business_name: document.getElementById('cl-business').value,
+          contact_name: document.getElementById('cl-contact').value,
+          contact_phone: document.getElementById('cl-phone').value,
+          contact_email: document.getElementById('cl-email').value,
+          site_domain: document.getElementById('cl-domain').value,
+          repo_url: document.getElementById('cl-repo').value,
+          status: document.getElementById('cl-status').value,
+          setup_fee: document.getElementById('cl-setup-fee').value,
+          monthly_fee: document.getElementById('cl-monthly-fee').value,
+          next_followup_date: document.getElementById('cl-followup').value
+        })
+      });
+      status.textContent = 'Agregado ✓';
+      status.className = 'form-status ok';
+      addForm.reset();
+      await renderClientesTab();
+    } catch (err) {
+      status.textContent = err.message;
+      status.className = 'form-status error';
+    }
+  };
+}
+
+async function renderClientesTab() {
+  const { items } = await api('/api/admin/clients');
+
+  const today = new Date().toISOString().slice(0, 10);
+  const pendientes = items
+    .filter((c) => c.next_followup_date && c.next_followup_date <= today)
+    .sort((a, b) => a.next_followup_date.localeCompare(b.next_followup_date));
+
+  const pendientesList = document.getElementById('clientes-pendientes-list');
+  if (pendientes.length === 0) {
+    pendientesList.innerHTML = '<p class="empty-state">No hay seguimientos pendientes por ahora.</p>';
+  } else {
+    pendientesList.innerHTML = '';
+    pendientes.forEach((c) => pendientesList.appendChild(renderClienteCard(c, true)));
+  }
+
+  const fullList = document.getElementById('clientes-list');
+  if (items.length === 0) {
+    fullList.innerHTML = '<p class="empty-state">Todavía no cargaste ningún cliente.</p>';
+    return;
+  }
+  fullList.innerHTML = '';
+  items.forEach((c) => fullList.appendChild(renderClienteCard(c, false)));
+}
+
+function renderClienteCard(c, isOverdueCopy) {
+  const today = new Date().toISOString().slice(0, 10);
+  const isOverdue = Boolean(c.next_followup_date && c.next_followup_date <= today);
+
+  const card = document.createElement('div');
+  card.className = 'cliente-card' + (isOverdue ? ' overdue' : '');
+
+  const head = document.createElement('div');
+  head.className = 'cliente-card-head';
+  const title = document.createElement('strong');
+  title.textContent = c.business_name;
+  const badge = document.createElement('span');
+  badge.className = `status-badge st-${c.status}`;
+  badge.textContent = CLIENT_STATUS_LABELS[c.status] || c.status;
+  head.appendChild(title);
+  head.appendChild(badge);
+  card.appendChild(head);
+
+  const grid = document.createElement('div');
+  grid.className = 'cliente-fields-grid';
+
+  const fieldsSpec = [
+    ['contact_name', 'Contacto', 'text'],
+    ['contact_phone', 'Teléfono', 'text'],
+    ['contact_email', 'Email', 'text'],
+    ['site_domain', 'Dominio', 'text'],
+    ['repo_url', 'Repo', 'text'],
+    ['setup_fee', 'Monto del sitio', 'text'],
+    ['monthly_fee', 'Canon mensual', 'text'],
+    ['next_followup_date', 'Próximo seguimiento', 'date']
+  ];
+  const inputs = {};
+  fieldsSpec.forEach(([key, label, type]) => {
+    const wrap = document.createElement('div');
+    const l = document.createElement('label');
+    l.textContent = label;
+    const input = document.createElement('input');
+    input.type = type;
+    input.value = c[key] || '';
+    inputs[key] = input;
+    wrap.appendChild(l);
+    wrap.appendChild(input);
+    grid.appendChild(wrap);
+  });
+
+  const statusWrap = document.createElement('div');
+  const statusLabel = document.createElement('label');
+  statusLabel.textContent = 'Estado';
+  const statusSelect = document.createElement('select');
+  Object.entries(CLIENT_STATUS_LABELS).forEach(([value, label]) => {
+    const opt = document.createElement('option');
+    opt.value = value;
+    opt.textContent = label;
+    if (value === c.status) opt.selected = true;
+    statusSelect.appendChild(opt);
+  });
+  statusWrap.appendChild(statusLabel);
+  statusWrap.appendChild(statusSelect);
+  grid.appendChild(statusWrap);
+
+  card.appendChild(grid);
+
+  const actions = document.createElement('div');
+  actions.className = 'cliente-card-actions';
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'btn-ghost';
+  saveBtn.textContent = 'Guardar';
+  saveBtn.onclick = async () => {
+    const updates = { status: statusSelect.value };
+    Object.entries(inputs).forEach(([key, input]) => { updates[key] = input.value; });
+    await api(`/api/admin/clients/${c.id}`, { method: 'PUT', body: JSON.stringify(updates) });
+    saveBtn.textContent = 'Guardado ✓';
+    setTimeout(() => (saveBtn.textContent = 'Guardar'), 1200);
+    await renderClientesTab();
+  };
+  const delBtn = document.createElement('button');
+  delBtn.type = 'button';
+  delBtn.className = 'btn-ghost danger';
+  delBtn.textContent = 'Borrar cliente';
+  delBtn.onclick = async () => {
+    if (!confirm(`¿Borrar a "${c.business_name}" y toda su bitácora?`)) return;
+    await api(`/api/admin/clients/${c.id}`, { method: 'DELETE' });
+    await renderClientesTab();
+  };
+  actions.appendChild(saveBtn);
+  actions.appendChild(delBtn);
+  card.appendChild(actions);
+
+  // La bitácora no se repite en la copia de "pendientes" - alcanza con verla en la
+  // lista completa de abajo, para no duplicar el mismo formulario dos veces en pantalla.
+  if (!isOverdueCopy) {
+    const notesWrap = document.createElement('div');
+    notesWrap.className = 'cliente-notes';
+
+    const notesList = document.createElement('div');
+    notesList.className = 'cliente-notes-list';
+    const notes = (c.notes || []).slice().reverse();
+    if (notes.length === 0) {
+      notesList.innerHTML = '<p class="empty-state" style="padding:8px 0;">Sin notas todavía.</p>';
+    } else {
+      notes.forEach((n) => {
+        const p = document.createElement('p');
+        p.className = 'cliente-note';
+        const date = new Date(n.created_at).toLocaleDateString('es-AR');
+        p.innerHTML = `<span class="cliente-note-date">${date}</span>${escapeHtml(n.text)}`;
+        notesList.appendChild(p);
+      });
+    }
+    notesWrap.appendChild(notesList);
+
+    const noteAdd = document.createElement('div');
+    noteAdd.className = 'cliente-note-add';
+    const noteInput = document.createElement('input');
+    noteInput.type = 'text';
+    noteInput.placeholder = 'Agregar una nota (ej: lo llamé, dijo que la semana que viene)';
+    const noteBtn = document.createElement('button');
+    noteBtn.type = 'button';
+    noteBtn.className = 'btn-ghost';
+    noteBtn.textContent = '+ Nota';
+    noteBtn.onclick = async () => {
+      if (!noteInput.value.trim()) return;
+      await api(`/api/admin/clients/${c.id}/notes`, { method: 'POST', body: JSON.stringify({ text: noteInput.value }) });
+      await renderClientesTab();
+    };
+    noteAdd.appendChild(noteInput);
+    noteAdd.appendChild(noteBtn);
+    notesWrap.appendChild(noteAdd);
+
+    card.appendChild(notesWrap);
+  }
+
+  return card;
 }
 
 // ---------- Cuenta (cambiar contraseña) ----------

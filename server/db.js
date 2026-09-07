@@ -39,6 +39,8 @@ async function ensureIndexes() {
   await db.collection('contact_messages').createIndex({ created_at: -1 });
   await db.collection('product_categories').createIndex({ position: 1 });
   await db.collection('products').createIndex({ category_id: 1, position: 1 });
+  await db.collection('clients').createIndex({ status: 1 });
+  await db.collection('clients').createIndex({ next_followup_date: 1 });
 }
 
 // --- Contenido semilla de la demo (sin fotos ni datos de ningún cliente real) ---

@@ -463,6 +463,81 @@ router.delete('/products/:id', asyncHandler(async (req, res) => {
 // poder verlo cualquier visitante sin sesión, ya que se muestra también en la página
 // principal del sitio.
 
+// ---------- Clientes (seguimiento comercial - herramienta interna de Hugo) ----------
+// No tiene nada que ver con la demo: es donde Hugo hace seguimiento de a quién le
+// vendió/le está por vender un sitio. No se toca en resetDemo().
+
+const CLIENT_STATUSES = ['prospecto', 'contactado', 'presupuestado', 'contratado', 'en_desarrollo', 'entregado', 'mantenimiento'];
+
+router.get('/clients', asyncHandler(async (req, res) => {
+  const items = await db.getDb().collection('clients').find().sort({ created_at: -1 }).toArray();
+  res.json({ items: items.map(({ _id, ...rest }) => ({ id: _id, ...rest })) });
+}));
+
+router.post('/clients', asyncHandler(async (req, res) => {
+  const { business_name, contact_name, contact_phone, contact_email, site_domain, repo_url, status, monthly_fee, setup_fee, next_followup_date } = req.body || {};
+  if (!business_name || !business_name.trim()) return res.status(400).json({ error: 'Falta el nombre del negocio.' });
+
+  const doc = {
+    business_name: business_name.trim(),
+    contact_name: (contact_name || '').trim(),
+    contact_phone: (contact_phone || '').trim(),
+    contact_email: (contact_email || '').trim(),
+    site_domain: (site_domain || '').trim(),
+    repo_url: (repo_url || '').trim(),
+    status: CLIENT_STATUSES.includes(status) ? status : 'prospecto',
+    monthly_fee: (monthly_fee || '').trim(),
+    setup_fee: (setup_fee || '').trim(),
+    next_followup_date: (next_followup_date || '').trim(),
+    notes: [],
+    created_at: new Date()
+  };
+
+  const result = await db.getDb().collection('clients').insertOne(doc);
+  res.json({ ok: true, id: result.insertedId });
+}));
+
+router.put('/clients/:id', asyncHandler(async (req, res) => {
+  const mongo = db.getDb();
+  const row = await mongo.collection('clients').findOne({ _id: new ObjectId(req.params.id) });
+  if (!row) return res.status(404).json({ error: 'No existe ese cliente.' });
+
+  const { business_name, contact_name, contact_phone, contact_email, site_domain, repo_url, status, monthly_fee, setup_fee, next_followup_date } = req.body || {};
+  const update = {};
+  if (business_name !== undefined) update.business_name = String(business_name).trim();
+  if (contact_name !== undefined) update.contact_name = String(contact_name).trim();
+  if (contact_phone !== undefined) update.contact_phone = String(contact_phone).trim();
+  if (contact_email !== undefined) update.contact_email = String(contact_email).trim();
+  if (site_domain !== undefined) update.site_domain = String(site_domain).trim();
+  if (repo_url !== undefined) update.repo_url = String(repo_url).trim();
+  if (status !== undefined && CLIENT_STATUSES.includes(status)) update.status = status;
+  if (monthly_fee !== undefined) update.monthly_fee = String(monthly_fee).trim();
+  if (setup_fee !== undefined) update.setup_fee = String(setup_fee).trim();
+  if (next_followup_date !== undefined) update.next_followup_date = String(next_followup_date).trim();
+
+  await mongo.collection('clients').updateOne({ _id: row._id }, { $set: update });
+  res.json({ ok: true });
+}));
+
+router.delete('/clients/:id', asyncHandler(async (req, res) => {
+  const result = await db.getDb().collection('clients').deleteOne({ _id: new ObjectId(req.params.id) });
+  if (result.deletedCount === 0) return res.status(404).json({ error: 'No existe ese cliente.' });
+  res.json({ ok: true });
+}));
+
+// Bitácora: cada nota queda con su fecha, no se pisan entre sí.
+router.post('/clients/:id/notes', asyncHandler(async (req, res) => {
+  const { text } = req.body || {};
+  if (!text || !text.trim()) return res.status(400).json({ error: 'Falta el texto de la nota.' });
+
+  const result = await db.getDb().collection('clients').updateOne(
+    { _id: new ObjectId(req.params.id) },
+    { $push: { notes: { text: text.trim(), created_at: new Date() } } }
+  );
+  if (result.matchedCount === 0) return res.status(404).json({ error: 'No existe ese cliente.' });
+  res.json({ ok: true });
+}));
+
 // ---------- Reset de la demo ----------
 
 // Vuelve el contenido, la galería, las redes y los testimonios a los valores de

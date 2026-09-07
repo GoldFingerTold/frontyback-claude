@@ -58,6 +58,7 @@
     <button class="admin-tab" data-tab="redes">Redes sociales</button>
     <button class="admin-tab" data-tab="productos">Productos</button>
     <button class="admin-tab" data-tab="mensajes">Mensajes</button>
+    <button class="admin-tab" data-tab="clientes">Clientes</button>
     <button class="admin-tab" data-tab="cuenta">Cuenta</button>
   </nav>
 
@@ -229,6 +230,81 @@
         <h2>Mensajes de contacto</h2>
         <p class="admin-hint">Lo que la gente envía desde el formulario de contacto del sitio.</p>
         <div id="messages-list" class="messages-list"></div>
+      </div>
+    </section>
+
+    <!-- ---------- CLIENTES (seguimiento comercial, herramienta interna) ---------- -->
+    <section id="tab-clientes" class="admin-panel">
+      <p class="admin-hint" style="margin-bottom: 20px;">
+        Esto no tiene nada que ver con la demo - es tu propio seguimiento de a quién le
+        vendiste o le estás por vender un sitio. Nadie más ve esta pestaña.
+      </p>
+
+      <div class="admin-card">
+        <h2>Seguimientos pendientes</h2>
+        <p class="admin-hint">Clientes con fecha de próximo contacto para hoy o ya vencida.</p>
+        <div id="clientes-pendientes-list" class="clientes-list"></div>
+      </div>
+
+      <div class="admin-card">
+        <h2>Agregar cliente</h2>
+        <form id="cliente-add-form">
+          <div class="field">
+            <label for="cl-business">Negocio *</label>
+            <input type="text" id="cl-business" required>
+          </div>
+          <div class="field">
+            <label for="cl-contact">Persona de contacto</label>
+            <input type="text" id="cl-contact">
+          </div>
+          <div class="field">
+            <label for="cl-phone">Teléfono</label>
+            <input type="text" id="cl-phone">
+          </div>
+          <div class="field">
+            <label for="cl-email">Email</label>
+            <input type="text" id="cl-email">
+          </div>
+          <div class="field">
+            <label for="cl-domain">Dominio del sitio</label>
+            <input type="text" id="cl-domain" placeholder="ejemplo.com">
+          </div>
+          <div class="field">
+            <label for="cl-repo">Repo de GitHub</label>
+            <input type="text" id="cl-repo" placeholder="https://github.com/...">
+          </div>
+          <div class="field">
+            <label for="cl-status">Estado</label>
+            <select id="cl-status">
+              <option value="prospecto">Prospecto</option>
+              <option value="contactado">Contactado</option>
+              <option value="presupuestado">Presupuestado</option>
+              <option value="contratado">Contratado</option>
+              <option value="en_desarrollo">En desarrollo</option>
+              <option value="entregado">Entregado</option>
+              <option value="mantenimiento">Mantenimiento</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cl-setup-fee">Monto del sitio (único pago)</label>
+            <input type="text" id="cl-setup-fee" placeholder="$150.000">
+          </div>
+          <div class="field">
+            <label for="cl-monthly-fee">Canon mensual (si tiene)</label>
+            <input type="text" id="cl-monthly-fee" placeholder="$10.000/mes">
+          </div>
+          <div class="field">
+            <label for="cl-followup">Próximo seguimiento</label>
+            <input type="date" id="cl-followup">
+          </div>
+          <button type="submit" class="btn btn-primary">Agregar cliente</button>
+          <p class="form-status" id="cliente-add-status"></p>
+        </form>
+      </div>
+
+      <div class="admin-card">
+        <h2>Todos los clientes</h2>
+        <div id="clientes-list" class="clientes-list"></div>
       </div>
     </section>
 

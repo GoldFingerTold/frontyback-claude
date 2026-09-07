@@ -139,7 +139,8 @@
   margin-bottom: 6px;
 }
 .field input,
-.field textarea {
+.field textarea,
+.field select {
   width: 100%;
   padding: 12px 14px;
   border-radius: var(--radius-sm);
@@ -433,3 +434,65 @@
   cursor: pointer;
 }
 .empty-state { color: var(--ink-muted); font-size: 0.9rem; padding: 20px 0; text-align: center; }
+
+/* ---------- Clientes (seguimiento comercial) ---------- */
+
+.clientes-list { display: flex; flex-direction: column; gap: 14px; }
+.cliente-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+}
+.cliente-card.overdue { border-color: var(--gold); background: var(--gold-soft); }
+.cliente-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.cliente-card-head strong { font-size: 1rem; }
+.status-badge.st-prospecto { background: rgba(180, 180, 180, 0.2); color: var(--ink-muted); }
+.status-badge.st-contactado { background: rgba(124, 170, 196, 0.18); color: #7caac4; }
+.status-badge.st-presupuestado { background: var(--gold-soft); color: var(--gold); }
+.status-badge.st-contratado { background: rgba(124, 196, 122, 0.18); color: #7cc47a; }
+.status-badge.st-en_desarrollo { background: rgba(124, 196, 122, 0.18); color: #7cc47a; }
+.status-badge.st-entregado { background: rgba(124, 196, 196, 0.18); color: #7cc4c0; }
+.status-badge.st-mantenimiento { background: rgba(160, 140, 220, 0.18); color: #a08cdc; }
+.cliente-fields-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px 16px;
+  margin-bottom: 10px;
+  font-size: 0.88rem;
+}
+.cliente-fields-grid label { display: block; color: var(--ink-muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.cliente-fields-grid input,
+.cliente-fields-grid select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+.cliente-card-actions { display: flex; gap: 8px; margin-bottom: 12px; }
+.cliente-card-actions .btn-ghost.danger { color: #e08a7f; border-color: #e08a7f; }
+.cliente-notes { border-top: 1px solid var(--line); padding-top: 10px; }
+.cliente-notes-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; max-height: 180px; overflow-y: auto; }
+.cliente-note { font-size: 0.85rem; }
+.cliente-note-date { color: var(--ink-muted); font-size: 0.72rem; margin-right: 6px; }
+.cliente-note-add { display: flex; gap: 8px; }
+.cliente-note-add input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--ink);
+}
