@@ -33,6 +33,62 @@ if (isCrossOrigin) {
 
 app.use(express.json());
 
+// Cache-Control explícito para archivos estáticos: sin esto, la CDN de Hostinger (HCDN)
+// cachea el CSS/JS por muchísimo tiempo (más de una hora, visto en la práctica) sin
+// importar el ?v=N de la URL ni que el archivo cambie - queda sirviendo una versión vieja.
+const staticOptions = {
+  setHeaders: (res) => {
+    res.setHeader('Cache-Control', 'no-store, must-revalidate');
+  }
+};
+
+// ---------------------------------------------------------------------------
+// Multi-rubro por subdominio. Una sola app sirve varias demos:
+//   frontyback.com / www.frontyback.com  -> landing de marca (public/landing/)
+//   eventos.frontyback.com               -> demo eventos (rubro por defecto)
+//   bares.frontyback.com                 -> demo bar
+//   cafes.frontyback.com                 -> demo café
+//   resto.frontyback.com                 -> demo restaurante
+// En local: <rubro>.localhost:PORT, o cualquier host con ?rubro=<rubro>.
+// ---------------------------------------------------------------------------
+const RUBRO_BY_HOST = {
+  'eventos.frontyback.com': 'eventos',
+  'bares.frontyback.com': 'bares',
+  'cafes.frontyback.com': 'cafes',
+  'resto.frontyback.com': 'resto'
+};
+
+function resolveRubro(req) {
+  const host = String(req.hostname || '').toLowerCase();
+  if (RUBRO_BY_HOST[host]) return RUBRO_BY_HOST[host];
+  // local: bares.localhost, cafes.127.0.0.1, etc.
+  const sub = host.split('.')[0];
+  if (db.RUBROS.includes(sub) && host !== sub) return sub;
+  // local / pruebas: ?rubro=bares
+  if (req.query && db.RUBROS.includes(req.query.rubro)) return req.query.rubro;
+  return null; // host raíz -> landing
+}
+
+const landingDir = path.join(__dirname, '..', 'public', 'landing');
+
+// 1) Resolver el rubro del request.
+app.use((req, res, next) => {
+  req.rubro = resolveRubro(req);
+  next();
+});
+
+// 2) Host raíz (sin rubro): sólo la landing de marca. No hay demo ni panel acá.
+app.use((req, res, next) => {
+  if (req.rubro) return next();
+  express.static(landingDir, staticOptions)(req, res, () => {
+    res.sendFile(path.join(landingDir, 'index.html'));
+  });
+});
+
+// 3) De acá en más siempre hay un rubro: todo corre dentro de su contexto, así
+//    getDb() en cualquier ruta devuelve la base de ese rubro sin más cambios.
+app.use((req, res, next) => db.runWith(req.rubro, () => next()));
+
 app.use(
   session({
     name: 'frontyback-demo.sid',
@@ -47,15 +103,8 @@ app.use(
   })
 );
 
-// Archivos estáticos: el sitio público, las imágenes semilla y lo subido desde el panel.
-// Cache-Control explícito: sin esto, la CDN de Hostinger (HCDN) cachea el CSS/JS por
-// muchísimo tiempo (más de una hora, visto en la práctica) sin importar el ?v=N de la
-// URL ni que el archivo cambie - queda sirviendo una versión vieja a todo el mundo.
-const staticOptions = {
-  setHeaders: (res) => {
-    res.setHeader('Cache-Control', 'no-store, must-revalidate');
-  }
-};
+// Archivos estáticos del sitio público: la demo, las imágenes semilla y lo subido desde
+// el panel. (Ya se resolvió el rubro y se entró en su contexto más arriba.)
 app.use(express.static(path.join(__dirname, '..', 'public'), staticOptions));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), staticOptions));
 

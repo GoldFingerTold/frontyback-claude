@@ -452,10 +452,28 @@ function initContactForm() {
 
 // ---------- Carga inicial ----------
 
+// Tiñe el sitio con el color de acento cargado en el panel (content.accent_color).
+// Pisa las variables --gold / --gold-dark / --gold-soft del CSS, que es lo que usan
+// botones, números de estadísticas, estrellas de testimonios, foco de campos, etc.
+function applyAccent(hex) {
+  if (!/^#[0-9a-fA-F]{6}$/.test(hex || '')) return;
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  const darker = '#' + [r, g, b]
+    .map((v) => Math.max(0, Math.round(v * 0.78)).toString(16).padStart(2, '0'))
+    .join('');
+  const s = document.documentElement.style;
+  s.setProperty('--gold', hex);
+  s.setProperty('--gold-dark', darker);
+  s.setProperty('--gold-soft', `rgba(${r}, ${g}, ${b}, 0.10)`);
+}
+
 async function loadSite() {
   const res = await fetch(apiUrl('/api/content'));
   const { content, gallery, social, testimonials } = await res.json();
 
+  applyAccent(content.accent_color);
   document.title = content.site_name || 'Demo — FrontyBack';
   setText('footer-brand', content.site_name);
   setText('footer-text', content.footer_text);

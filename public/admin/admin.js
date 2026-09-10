@@ -7,6 +7,7 @@ const FIELD_GROUPS = [
     fields: [
       { key: 'site_name', label: 'Nombre del sitio', type: 'text' },
       { key: 'site_tagline', label: 'Bajada / rubro', type: 'text' },
+      { key: 'accent_color', label: 'Color de acento (hex, ej: #1f6f4a)', type: 'text' },
       { key: 'footer_text', label: 'Texto del pie de página', type: 'text' }
     ]
   },

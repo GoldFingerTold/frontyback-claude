@@ -17,6 +17,22 @@ function setText(id, value) {
   if (el) el.textContent = value || '';
 }
 
+// Mismo criterio que main.js: tiñe la página con content.accent_color pisando las
+// variables --gold* del CSS.
+function applyAccent(hex) {
+  if (!/^#[0-9a-fA-F]{6}$/.test(hex || '')) return;
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  const darker = '#' + [r, g, b]
+    .map((v) => Math.max(0, Math.round(v * 0.78)).toString(16).padStart(2, '0'))
+    .join('');
+  const s = document.documentElement.style;
+  s.setProperty('--gold', hex);
+  s.setProperty('--gold-dark', darker);
+  s.setProperty('--gold-soft', `rgba(${r}, ${g}, ${b}, 0.10)`);
+}
+
 function renderBrand(content) {
   const logo = document.getElementById('nav-logo');
   const brandText = document.getElementById('nav-brand-text');
@@ -101,6 +117,7 @@ async function loadPage() {
   const { content } = await contentRes.json();
   const { categories } = await productsRes.json();
 
+  applyAccent(content.accent_color);
   document.title = `Productos — ${content.site_name || ''}`;
   renderBrand(content);
   renderNavLabels(content);
