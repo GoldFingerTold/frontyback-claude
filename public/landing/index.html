@@ -10,34 +10,19 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://frontyback.com">
 <style>
+  /* Landing de marca: se fija en oscuro para todos los visitantes (decisión de Hugo,
+     resalta más y la diferencia de las demos, que son claras). No sigue el
+     prefers-color-scheme del navegador a propósito. */
   :root {
-    --bg: #f3ede0;
-    --surface: #fffdf8;
-    --ink: #1c1a16;
-    --ink-soft: rgba(28, 26, 22, 0.62);
-    --line: rgba(28, 26, 22, 0.12);
-    --blue: #2f5fe0;
-    --orange: #e08a1e;
-    --shadow: 0 18px 40px rgba(28, 26, 22, 0.10);
-    --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #17161a;
-      --surface: #201f25;
-      --ink: #f3f1ec;
-      --ink-soft: rgba(243, 241, 236, 0.60);
-      --line: rgba(243, 241, 236, 0.14);
-      --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-    }
-  }
-  :root[data-theme="dark"] {
     --bg: #17161a;
     --surface: #201f25;
     --ink: #f3f1ec;
     --ink-soft: rgba(243, 241, 236, 0.60);
     --line: rgba(243, 241, 236, 0.14);
+    --blue: #5b83f5;
+    --orange: #e08a1e;
     --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
   }
 
   * { box-sizing: border-box; }
