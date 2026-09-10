@@ -29,7 +29,7 @@ if (!uri) {
 const client = new MongoClient(uri);
 
 // --- Rubros y a qué base va cada uno ---
-const RUBROS = ['eventos', 'bares', 'cafes', 'resto'];
+const RUBROS = ['eventos', 'bares', 'cafes', 'resto', 'inmo'];
 const DEFAULT_RUBRO = 'eventos';
 
 // Si el connection string apunta a una base "-dev", las bases por rubro también llevan
@@ -45,7 +45,8 @@ const DB_NAME_BY_RUBRO = {
   eventos: null,
   bares: 'frontyback-bares' + DEV_SUFFIX,
   cafes: 'frontyback-cafes' + DEV_SUFFIX,
-  resto: 'frontyback-resto' + DEV_SUFFIX
+  resto: 'frontyback-resto' + DEV_SUFFIX,
+  inmo: 'frontyback-inmo' + DEV_SUFFIX
 };
 
 const dbs = new Map(); // rubro -> Db
@@ -244,6 +245,36 @@ const RUBRO_OVERRIDES = {
     salon_text: 'Mostrá tu salón: la puesta de mesa, la cava, la cocina a la vista, la terraza. Las fotos se administran desde el panel.',
     productos_heading: 'Nuestro menú',
     contact_subheading: '¿Querés un sitio así para tu restaurante?'
+  },
+
+  inmo: {
+    site_name: 'Tu Inmobiliaria',
+    accent_color: '#1f3a6b',
+    site_tagline: 'Así se vería tu sitio',
+    nav_servicios_label: 'Servicios',
+    nav_salon_label: 'Emprendimientos',
+    nav_productos_label: 'Tipologías y precios',
+    banner_title: 'Tu Inmobiliaria',
+    banner_subtitle: 'Esto es una demo de FrontyBack: un sitio real, con un panel donde vos mismo cargás emprendimientos, fotos, avance de obra y precios, sin depender de nadie.',
+    stat_1_number: '45',
+    stat_1_label: 'Unidades disponibles',
+    stat_2_number: '3',
+    stat_2_label: 'Emprendimientos activos',
+    stat_3_number: '18',
+    stat_3_label: 'Meses a la posesión',
+    servicios_heading: 'Qué hacemos',
+    servicios_subheading: 'De la reserva a la escritura',
+    servicios_text: [
+      'Contá tu propuesta: venta de unidades en pozo, financiación en cuotas en pesos, entrega llave en mano.',
+      'Cada servicio es un párrafo aparte: tasaciones, alquileres, asesoramiento y escrituración.',
+      'Ideal para mostrar formas de pago, anticipo y plan de cuotas de cada emprendimiento.'
+    ].join('\n\n'),
+    salon_heading: 'Nuestros emprendimientos',
+    salon_subheading: 'Así se muestran tus fotos',
+    salon_text: 'Mostrá cada emprendimiento: renders, avance de obra, ubicación y amenities. Las fotos se suben y reordenan desde el panel a medida que avanza la obra.',
+    productos_heading: 'Tipologías y precios',
+    productos_subheading: 'Escaneá para ver',
+    contact_subheading: '¿Querés un sitio así para tu inmobiliaria?'
   }
 };
 
@@ -340,6 +371,31 @@ const PRODUCTS_BY_RUBRO = {
       products: [
         { name: 'Flan casero con dulce', price: '$4.800' },
         { name: 'Volcán de chocolate', price: '$5.600' }
+      ]
+    }
+  ],
+  inmo: [
+    {
+      name: 'Torre Ríos — Entrega 2026',
+      products: [
+        { name: 'Monoambiente (32 m²)', price: 'Desde USD 62.000' },
+        { name: '2 ambientes (48 m²)', price: 'Desde USD 89.000' },
+        { name: '3 ambientes (71 m²)', price: 'Desde USD 128.000' }
+      ]
+    },
+    {
+      name: 'Distrito Norte — En pozo',
+      products: [
+        { name: '2 ambientes con balcón', price: 'Desde USD 84.000' },
+        { name: '2 ambientes con cochera', price: 'Desde USD 97.000' },
+        { name: 'Dúplex 3 ambientes', price: 'Desde USD 145.000' }
+      ]
+    },
+    {
+      name: 'Formas de pago',
+      products: [
+        { name: 'Anticipo 30% + 40 cuotas en pesos', price: 'Ajuste CAC' },
+        { name: 'Contado', price: '10% de descuento' }
       ]
     }
   ]
