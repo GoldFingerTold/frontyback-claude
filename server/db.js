@@ -253,7 +253,7 @@ const RUBRO_OVERRIDES = {
     site_tagline: 'Así se vería tu sitio',
     nav_servicios_label: 'Servicios',
     nav_salon_label: 'Emprendimientos',
-    nav_productos_label: 'Tipologías y precios',
+    nav_productos_label: 'Tipologías',
     banner_title: 'Tu Inmobiliaria',
     banner_subtitle: 'Esto es una demo de FrontyBack: un sitio real, con un panel donde vos mismo cargás emprendimientos, fotos, avance de obra y precios, sin depender de nadie.',
     stat_1_number: '45',

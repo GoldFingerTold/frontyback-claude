@@ -118,10 +118,13 @@ async function loadPage() {
   const { categories } = await productsRes.json();
 
   applyAccent(content.accent_color);
-  document.title = `Productos — ${content.site_name || ''}`;
+  document.title = `${content.nav_productos_label || 'Productos'} — ${content.site_name || ''}`;
   renderBrand(content);
   renderNavLabels(content);
-  setText('productos-title', content.nav_productos_label ? `${content.nav_productos_label}` : 'Nuestros productos');
+  // Antetítulo = etiqueta corta del rubro (Carta / Menú / Tipologías); título = el
+  // encabezado descriptivo que también se edita desde el panel (productos_heading).
+  setText('productos-kicker', content.nav_productos_label || 'Productos y precios');
+  setText('productos-title', content.productos_heading || 'Nuestros productos y precios');
   setText('footer-brand', content.site_name);
   setText('footer-text', content.footer_text);
   document.getElementById('footer-year').textContent = String(new Date().getFullYear());
