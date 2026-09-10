@@ -35,7 +35,7 @@
     -webkit-font-smoothing: antialiased;
   }
   .wrap {
-    max-width: 900px;
+    max-width: 980px;
     margin: 0 auto;
     padding: clamp(32px, 7vw, 80px) 20px 64px;
   }
@@ -80,9 +80,11 @@
   }
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 14px;
   }
+  @media (min-width: 600px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 900px) { .grid { grid-template-columns: repeat(5, 1fr); } }
   .card {
     display: block;
     background: var(--surface);
