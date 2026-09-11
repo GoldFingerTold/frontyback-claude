@@ -113,11 +113,15 @@
           <div class="field" id="pe-video-block" hidden>
             <label for="pe-video-url">Link del video (YouTube o Instagram - pegalo tal cual, se acomoda solo)</label>
             <input type="text" id="pe-video-url" placeholder="https://www.youtube.com/watch?v=... o instagram.com/reel/...">
-            <label style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+          </div>
+          <div class="field" id="pe-vertical-block">
+            <label style="display:flex; align-items:center; gap:8px;">
               <input type="checkbox" id="pe-vertical" style="width:auto;">
-              Es un video vertical (Reels/Shorts/TikTok)
+              Es vertical (formato retrato, como una foto o un Reel/Story)
             </label>
-            <p class="admin-hint" style="margin-top:4px;">Se marca solo si pegás un link de Shorts, pero podés tildarlo/destildarlo a mano si hace falta.</p>
+            <p class="admin-hint" style="margin-top:4px;">Tildalo si la foto o el video son verticales, para que se vean completos
+              en vez de recortados. En video se marca solo al pegar un link de Shorts/Reels, pero lo podés
+              tildar o destildar a mano cuando haga falta.</p>
           </div>
           <button type="submit" class="btn btn-primary">Guardar próximo evento</button>
           <p class="form-status" id="pe-status"></p>

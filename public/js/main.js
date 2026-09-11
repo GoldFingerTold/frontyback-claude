@@ -300,6 +300,9 @@ function renderProximoEvento(content) {
     video.src = '';
     img.src = resolveImageUrl(content.proximo_evento_image);
     img.hidden = false;
+    // Mismo criterio que el video: si el campo está tildado, se angosta y centra en
+    // vez de recortarse contra un marco horizontal fijo.
+    img.classList.toggle('vertical', content.proximo_evento_vertical === '1');
   } else {
     // Activado pero sin foto ni video cargados todavía: mejor no mostrar nada roto.
     section.hidden = true;
