@@ -29,7 +29,7 @@ if (!uri) {
 const client = new MongoClient(uri);
 
 // --- Rubros y a qué base va cada uno ---
-const RUBROS = ['eventos', 'bares', 'cafes', 'resto', 'inmo', 'muelita', 'toguita', 'curita', 'cuentita'];
+const RUBROS = ['eventos', 'bares', 'cafes', 'resto', 'inmo', 'muelita', 'toguita', 'curita', 'cuentita', 'gym', 'tiendas'];
 const DEFAULT_RUBRO = 'eventos';
 
 // Si el connection string apunta a una base "-dev", las bases por rubro también llevan
@@ -50,7 +50,9 @@ const DB_NAME_BY_RUBRO = {
   muelita: 'frontyback-muelita' + DEV_SUFFIX,
   toguita: 'frontyback-toguita' + DEV_SUFFIX,
   curita: 'frontyback-curita' + DEV_SUFFIX,
-  cuentita: 'frontyback-cuentita' + DEV_SUFFIX
+  cuentita: 'frontyback-cuentita' + DEV_SUFFIX,
+  gym: 'frontyback-gym' + DEV_SUFFIX,
+  tiendas: 'frontyback-tiendas' + DEV_SUFFIX
 };
 
 const dbs = new Map(); // rubro -> Db
@@ -406,6 +408,64 @@ const RUBRO_OVERRIDES = {
     productos_heading: 'Servicios y honorarios',
     productos_subheading: 'Escaneá para ver',
     contact_subheading: '¿Querés un sitio así para tu estudio?'
+  },
+
+  gym: {
+    site_name: 'Tu Gimnasio',
+    accent_color: '#e06423',
+    nav_servicios_label: 'Servicios',
+    nav_salon_label: 'Instalaciones',
+    nav_productos_label: 'Planes',
+    banner_title: 'Tu Gimnasio',
+    banner_subtitle: 'Musculación, clases grupales y entrenamiento personalizado. Editá los textos, las fotos y los planes desde tu panel, cuando quieras.',
+    stat_1_number: '500+',
+    stat_1_label: 'Socios activos',
+    stat_2_number: '15',
+    stat_2_label: 'Clases por semana',
+    stat_3_number: '10',
+    stat_3_label: 'Años en el barrio',
+    servicios_heading: 'Nuestros servicios',
+    servicios_subheading: 'Todo lo que necesitás para entrenar',
+    servicios_text: [
+      'Contá tu propuesta: musculación, entrenamiento funcional, clases grupales como spinning y crossfit, y asesoramiento nutricional.',
+      'Cada servicio es un párrafo aparte. Sumá entrenamiento personalizado y evaluaciones físicas; se editan desde el panel.',
+      'Actualizá los horarios de clases y los planes vos mismo, cuando haga falta.'
+    ].join('\n\n'),
+    salon_heading: 'Nuestras instalaciones',
+    salon_subheading: 'Así se ve nuestro espacio',
+    salon_text: 'Mostrá la sala de musculación, el área funcional y los vestuarios. Las fotos se suben, borran y reordenan desde el panel en segundos.',
+    productos_heading: 'Nuestros planes',
+    productos_subheading: 'Escaneá para ver',
+    contact_subheading: '¿Querés un sitio así para tu gimnasio?'
+  },
+
+  tiendas: {
+    site_name: 'Tu Tienda',
+    accent_color: '#8a3fa0',
+    nav_servicios_label: 'Servicios',
+    nav_salon_label: 'Local',
+    nav_productos_label: 'Productos',
+    banner_title: 'Tu Tienda',
+    banner_subtitle: 'Productos elegidos con cuidado, envíos a todo el país y atención personalizada. Editá los textos, las fotos y el catálogo desde tu panel, cuando quieras.',
+    stat_1_number: '200+',
+    stat_1_label: 'Productos en catálogo',
+    stat_2_number: '5',
+    stat_2_label: 'Años de trayectoria',
+    stat_3_number: '48hs',
+    stat_3_label: 'Envíos a todo el país',
+    servicios_heading: '¿Por qué elegirnos?',
+    servicios_subheading: 'Calidad y atención en cada compra',
+    servicios_text: [
+      'Contá tu propuesta: selección cuidada de productos, envíos a todo el país y cambios sin complicaciones.',
+      'Cada punto es un párrafo aparte. Sumá medios de pago, promociones y atención por WhatsApp; se editan desde el panel.',
+      'Actualizá el catálogo y los precios vos mismo, cada vez que sumes novedades.'
+    ].join('\n\n'),
+    salon_heading: 'Nuestro local',
+    salon_subheading: 'Así se ve nuestro espacio',
+    salon_text: 'Mostrá el local, la vidriera y los productos en exhibición. Las fotos se suben, borran y reordenan desde el panel en segundos.',
+    productos_heading: 'Nuestro catálogo',
+    productos_subheading: 'Escaneá para ver',
+    contact_subheading: '¿Querés un sitio así para tu comercio?'
   }
 };
 
@@ -635,6 +695,53 @@ const PRODUCTS_BY_RUBRO = {
       products: [
         { name: 'Balance anual (PyME)', price: 'Desde $180.000' },
         { name: 'Asesoramiento impositivo (mensual)', price: 'Desde $50.000' }
+      ]
+    }
+  ],
+  gym: [
+    {
+      name: 'Planes mensuales',
+      products: [
+        { name: 'Plan mensual', price: '$18.000' },
+        { name: 'Plan trimestral', price: '$48.000' },
+        { name: 'Plan anual', price: '$170.000' }
+      ]
+    },
+    {
+      name: 'Clases grupales',
+      products: [
+        { name: 'Spinning (clase suelta)', price: '$3.500' },
+        { name: 'Crossfit (clase suelta)', price: '$4.000' }
+      ]
+    },
+    {
+      name: 'Entrenamiento personalizado',
+      products: [
+        { name: 'Sesión individual', price: '$12.000' },
+        { name: 'Pack x8 sesiones', price: '$85.000' }
+      ]
+    }
+  ],
+  tiendas: [
+    {
+      name: 'Novedades',
+      products: [
+        { name: 'Remera básica', price: '$15.000' },
+        { name: 'Buzo oversize', price: '$28.000' }
+      ]
+    },
+    {
+      name: 'Más vendidos',
+      products: [
+        { name: 'Zapatillas urbanas', price: '$65.000' },
+        { name: 'Mochila', price: '$32.000' }
+      ]
+    },
+    {
+      name: 'Ofertas',
+      products: [
+        { name: 'Gorra', price: '$8.000' },
+        { name: 'Medias (pack x3)', price: '$6.000' }
       ]
     }
   ]
