@@ -109,19 +109,89 @@ function renderBrand(content) {
   }
 }
 
-// Foto de portada si hay una cargada, o un placeholder invitando a subir una - así se
-// ve intencional (no roto) mientras no se cargó ninguna imagen todavía.
-function renderHeroImage(content) {
+// Portada en modo "galería": cross-fade automático entre varias fotos (útil, por
+// ejemplo, para mostrar el avance de obra de un edificio en Inmo). Sin librería - un
+// <img> de fondo por foto superpuestos, alternando cuál está "activa" con una
+// transición de opacity en CSS (ver .hero-gallery-slide en style.css).
+let heroGalleryTimer = null;
+function stopHeroGalleryRotator() {
+  if (heroGalleryTimer) {
+    clearInterval(heroGalleryTimer);
+    heroGalleryTimer = null;
+  }
+}
+function startHeroGalleryRotator(container, items) {
+  container.innerHTML = '';
+  items.forEach((item, i) => {
+    const img = document.createElement('img');
+    img.src = resolveImageUrl(item.url);
+    img.alt = item.alt || '';
+    img.className = 'hero-gallery-slide' + (i === 0 ? ' active' : '');
+    container.appendChild(img);
+  });
+  container.hidden = false;
+
+  if (items.length <= 1) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let index = 0;
+  heroGalleryTimer = setInterval(() => {
+    const slides = container.querySelectorAll('.hero-gallery-slide');
+    slides[index].classList.remove('active');
+    index = (index + 1) % slides.length;
+    slides[index].classList.add('active');
+  }, 4500);
+}
+
+// Portada: foto (de siempre), video (archivo subido o link externo pegado), o galería
+// con transición automática - según banner_media_type. Si no hay nada cargado todavía
+// para el modo elegido, se ve el placeholder invitando a cargar algo (nunca queda roto).
+function renderHero(content, bannerGallery) {
   const img = document.getElementById('banner-image');
   const placeholder = document.getElementById('hero-placeholder');
+  const video = document.getElementById('banner-video');
+  const videoWrap = document.getElementById('banner-video-wrap');
+  const videoEmbed = document.getElementById('banner-video-embed');
+  const igWrap = document.getElementById('banner-instagram');
+  const galleryEl = document.getElementById('banner-gallery');
+
+  // Arrancar todo oculto y solo prender lo que corresponda al modo activo.
+  img.hidden = true;
+  video.hidden = true;
+  video.pause();
+  video.removeAttribute('src');
+  videoWrap.hidden = true;
+  videoEmbed.src = '';
+  galleryEl.hidden = true;
+  stopHeroGalleryRotator();
+
+  const mediaType = content.banner_media_type || 'image';
+
+  if (mediaType === 'video' && content.banner_video_file) {
+    video.src = content.banner_video_file;
+    video.hidden = false;
+    if (placeholder) placeholder.hidden = true;
+    return;
+  }
+  if (mediaType === 'video' && content.banner_video_url) {
+    renderVideoEmbed({ videoWrap, videoEl: videoEmbed, igWrap }, content.banner_video_url);
+    if (placeholder) placeholder.hidden = true;
+    return;
+  }
+  if (mediaType === 'gallery' && bannerGallery && bannerGallery.length > 0) {
+    startHeroGalleryRotator(galleryEl, bannerGallery);
+    if (placeholder) placeholder.hidden = true;
+    return;
+  }
   if (content.banner_image) {
     img.src = resolveImageUrl(content.banner_image);
     img.alt = content.site_name || '';
     img.hidden = false;
     if (placeholder) placeholder.hidden = true;
-  } else {
-    img.hidden = true;
-    if (placeholder) placeholder.hidden = false;
+  } else if (placeholder) {
+    // Nada cargado todavía para el modo elegido (o sigue en el default "foto" sin
+    // foto puesta) - mejor el placeholder invitando a cargar algo que un hueco roto.
+    placeholder.hidden = false;
   }
 }
 
@@ -255,6 +325,34 @@ function renderInstagramEmbed(container, permalink) {
   });
 }
 
+// Arma un embed de video a partir de un link externo pegado por el admin (YouTube o
+// Instagram, vía parseVideoUrl) dentro de los elementos de una sección dada - reusado
+// tanto por "Próximo evento" como por la portada, para no duplicar esta lógica entre
+// las dos. Devuelve si el link resultó vertical (Shorts/Reel), para que quien llama
+// decida si angostar el marco.
+function renderVideoEmbed({ videoWrap, videoEl, igWrap }, videoUrl) {
+  if (!videoUrl) {
+    videoWrap.hidden = true;
+    return { vertical: false };
+  }
+  const parsed = parseVideoUrl(videoUrl);
+
+  if (parsed && parsed.platform === 'instagram') {
+    videoEl.hidden = true;
+    videoEl.src = '';
+    igWrap.hidden = false;
+    renderInstagramEmbed(igWrap, parsed.permalink);
+  } else {
+    igWrap.hidden = true;
+    igWrap.innerHTML = '';
+    videoEl.hidden = false;
+    videoEl.src = parsed ? parsed.embedUrl : videoUrl;
+  }
+
+  videoWrap.hidden = false;
+  return { vertical: Boolean(parsed && parsed.vertical) };
+}
+
 function renderProximoEvento(content) {
   const section = document.getElementById('proximo-evento');
   if (!section) return;
@@ -273,28 +371,15 @@ function renderProximoEvento(content) {
   const igWrap = document.getElementById('proximo-evento-instagram');
 
   if (content.proximo_evento_media_type === 'video' && content.proximo_evento_video_url) {
-    const parsed = parseVideoUrl(content.proximo_evento_video_url);
     img.hidden = true;
-
-    if (parsed && parsed.platform === 'instagram') {
-      video.hidden = true;
-      video.src = '';
-      igWrap.hidden = false;
-      renderInstagramEmbed(igWrap, parsed.permalink);
-    } else {
-      igWrap.hidden = true;
-      igWrap.innerHTML = '';
-      video.hidden = false;
-      video.src = parsed ? parsed.embedUrl : content.proximo_evento_video_url;
-    }
+    const { vertical } = renderVideoEmbed({ videoWrap, videoEl: video, igWrap }, content.proximo_evento_video_url);
 
     // Vertical si el campo lo tiene tildado (el admin lo puede forzar a mano) O si el
     // link pegado era de Shorts/Reel - no exigimos las dos cosas, porque el campo puede
     // haber quedado en su valor por defecto ("0") en contenido cargado antes de que
     // existiera esta casilla.
-    const isVertical = content.proximo_evento_vertical === '1' || Boolean(parsed && parsed.vertical);
+    const isVertical = content.proximo_evento_vertical === '1' || vertical;
     videoWrap.classList.toggle('vertical', isVertical);
-    videoWrap.hidden = false;
   } else if (content.proximo_evento_image) {
     videoWrap.hidden = true;
     video.src = '';
@@ -474,7 +559,7 @@ function applyAccent(hex) {
 
 async function loadSite() {
   const res = await fetch(apiUrl('/api/content'));
-  const { content, gallery, social, testimonials } = await res.json();
+  const { content, gallery, bannerGallery, social, testimonials } = await res.json();
 
   applyAccent(content.accent_color);
   document.title = content.site_name || 'Demo — FrontyBack';
@@ -483,7 +568,7 @@ async function loadSite() {
   document.getElementById('footer-year').textContent = String(new Date().getFullYear());
 
   renderBrand(content);
-  renderHeroImage(content);
+  renderHero(content, bannerGallery);
   setText('site-tagline', content.site_tagline);
   setText('banner-title', content.banner_title);
   setText('banner-subtitle', content.banner_subtitle);

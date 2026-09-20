@@ -141,14 +141,53 @@
       </div>
 
       <div class="admin-card">
-        <h2>Foto principal (portada)</h2>
-        <p class="admin-hint">Aparece de fondo en la portada del sitio.</p>
-        <div class="image-replace" data-key="banner_image">
-          <img class="image-preview" alt="Portada actual">
+        <h2>Portada</h2>
+        <p class="admin-hint">Lo que aparece de fondo arriba de todo, detrás del título. Elegí si querés
+          mostrar una foto, un video en loop (subido o pegando un link), o varias fotos que se van
+          turnando solas - útil, por ejemplo, para mostrar el avance de obra de un edificio.</p>
+        <form id="banner-form">
+          <div class="field">
+            <label for="banner-media-type">Tipo de portada</label>
+            <select id="banner-media-type">
+              <option value="image">Foto</option>
+              <option value="video">Video</option>
+              <option value="gallery">Galería con transición automática</option>
+            </select>
+          </div>
+          <div class="field" id="banner-video-block" hidden>
+            <label for="banner-video-url">Link del video (YouTube o Instagram - pegalo tal cual, se acomoda solo)</label>
+            <input type="text" id="banner-video-url" placeholder="https://www.youtube.com/watch?v=... o instagram.com/reel/...">
+          </div>
+          <button type="submit" class="btn btn-primary">Guardar portada</button>
+          <p class="form-status" id="banner-status"></p>
+        </form>
+        <div class="field" id="banner-image-block">
+          <label>Foto</label>
+          <div class="image-replace" data-key="banner_image">
+            <img class="image-preview" alt="Portada actual">
+            <label class="btn-ghost file-btn">
+              Cambiar imagen
+              <input type="file" accept="image/*" class="image-input">
+            </label>
+          </div>
+        </div>
+        <div class="field" id="banner-video-upload-block" hidden>
+          <label>O subí directamente el archivo de video (se reproduce en loop, sin sonido ni controles)</label>
+          <div id="banner-video-current" class="admin-hint" hidden></div>
           <label class="btn-ghost file-btn">
-            Cambiar imagen
-            <input type="file" accept="image/*" class="image-input">
+            Subir archivo de video
+            <input type="file" accept="video/mp4,video/webm,video/quicktime" id="banner-video-input">
           </label>
+        </div>
+        <div class="field" id="banner-gallery-block" hidden>
+          <label>Fotos de la galería</label>
+          <p class="admin-hint">Subí, borrá o reordená (con las flechas) las fotos que van a ir rotando solas
+            en la portada.</p>
+          <label class="btn btn-primary file-btn">
+            Subir foto nueva
+            <input type="file" accept="image/*" id="banner-gallery-upload-input">
+          </label>
+          <div id="banner-gallery-admin-grid" class="gallery-admin-grid"></div>
         </div>
       </div>
 

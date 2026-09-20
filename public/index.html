@@ -40,6 +40,17 @@
 <header class="hero" id="top">
   <div class="hero-media">
     <img id="banner-image" src="" alt="" class="hero-img" hidden>
+    <video id="banner-video" class="hero-video" autoplay muted loop playsinline hidden></video>
+    <div class="video-frame hero-video-frame" id="banner-video-wrap" hidden>
+      <iframe id="banner-video-embed" src="" title="Video de portada" loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+      <!-- Instagram no permite un iframe simple como YouTube - hace falta su propio
+           widget oficial (embed.js + este bloque especial). Ver renderVideoBlock en
+           public/js/main.js (compartido con "Próximo evento"). -->
+      <div id="banner-instagram" class="instagram-embed-wrap" hidden></div>
+    </div>
+    <div class="hero-gallery" id="banner-gallery" hidden></div>
     <div class="hero-placeholder" id="hero-placeholder">
       <span>📷 Así se vería tu foto acá</span>
     </div>

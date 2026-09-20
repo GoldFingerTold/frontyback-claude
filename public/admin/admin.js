@@ -276,6 +276,7 @@ async function loadFotosTab() {
   const { content } = await api('/api/admin/content');
 
   initProximoEvento(content);
+  initBannerMedia(content);
 
   document.querySelectorAll('.image-replace').forEach((el) => {
     const key = el.dataset.key;
@@ -404,6 +405,70 @@ async function moveGalleryItem(items, index, delta) {
   await loadGalleryAdmin();
 }
 
+// Galería de portada (modo "galería" del hero) - mismo componente que la galería
+// general de arriba, apuntando a los endpoints /api/admin/banner-gallery en vez de
+// /api/admin/gallery.
+async function loadBannerGalleryAdmin() {
+  const grid = document.getElementById('banner-gallery-admin-grid');
+  const { items } = await api('/api/admin/banner-gallery');
+
+  if (items.length === 0) {
+    grid.innerHTML = '<p class="empty-state">Todavía no hay fotos cargadas para la portada.</p>';
+    return;
+  }
+
+  grid.innerHTML = '';
+  items.forEach((item, index) => {
+    const cell = document.createElement('div');
+    cell.className = 'gallery-admin-item';
+
+    const img = document.createElement('img');
+    img.src = resolveImageUrl(item.url);
+    img.alt = item.alt || '';
+    cell.appendChild(img);
+
+    const actions = document.createElement('div');
+    actions.className = 'gallery-admin-item-actions';
+
+    const upBtn = document.createElement('button');
+    upBtn.type = 'button';
+    upBtn.textContent = '↑';
+    upBtn.disabled = index === 0;
+    upBtn.onclick = () => moveBannerGalleryItem(items, index, -1);
+
+    const downBtn = document.createElement('button');
+    downBtn.type = 'button';
+    downBtn.textContent = '↓';
+    downBtn.disabled = index === items.length - 1;
+    downBtn.onclick = () => moveBannerGalleryItem(items, index, 1);
+
+    const delBtn = document.createElement('button');
+    delBtn.type = 'button';
+    delBtn.textContent = 'Borrar';
+    delBtn.className = 'danger';
+    delBtn.onclick = async () => {
+      if (!confirm('¿Borrar esta foto de la portada?')) return;
+      await api(`/api/admin/banner-gallery/${item.id}`, { method: 'DELETE' });
+      await loadBannerGalleryAdmin();
+    };
+
+    actions.appendChild(upBtn);
+    actions.appendChild(downBtn);
+    actions.appendChild(delBtn);
+    cell.appendChild(actions);
+    grid.appendChild(cell);
+  });
+}
+
+async function moveBannerGalleryItem(items, index, delta) {
+  const newIndex = index + delta;
+  if (newIndex < 0 || newIndex >= items.length) return;
+  const order = items.map((i) => i.id);
+  [order[index], order[newIndex]] = [order[newIndex], order[index]];
+  await api('/api/admin/banner-gallery/reorder', { method: 'PUT', body: JSON.stringify({ order }) });
+  await loadBannerGalleryAdmin();
+}
+
 // Acepta un link de YouTube (watch, youtu.be, shorts, o ya embed) o de Instagram (reel o
 // post). Cada plataforma necesita guardarse distinto: YouTube como link /embed/ (así lo
 // usa un iframe directo), Instagram como su link normal ("permalink" - lo arma su propio
@@ -490,6 +555,106 @@ function initProximoEvento(content) {
           proximo_evento_media_type: mediaType.value,
           proximo_evento_video_url: parsed ? parsed.storedUrl : videoUrl.value,
           proximo_evento_vertical: vertical.checked ? '1' : '0'
+        })
+      });
+      status.textContent = 'Guardado ✓';
+      status.className = 'form-status ok';
+    } catch (err) {
+      status.textContent = err.message;
+      status.className = 'form-status error';
+    }
+  };
+}
+
+// Portada: selector de tipo (foto/video/galería) + guardado del link de video pegado.
+// La foto (.image-replace), el archivo de video subido y la galería de portada tienen
+// cada uno su propio guardado independiente (como ya pasa con la foto de "Próximo
+// evento") - este formulario solo guarda banner_media_type y banner_video_url.
+function initBannerMedia(content) {
+  const mediaType = document.getElementById('banner-media-type');
+  const videoUrl = document.getElementById('banner-video-url');
+  const imageBlock = document.getElementById('banner-image-block');
+  const videoBlock = document.getElementById('banner-video-block');
+  const videoUploadBlock = document.getElementById('banner-video-upload-block');
+  const galleryBlock = document.getElementById('banner-gallery-block');
+  const videoInput = document.getElementById('banner-video-input');
+  const videoCurrent = document.getElementById('banner-video-current');
+  const form = document.getElementById('banner-form');
+  const status = document.getElementById('banner-status');
+
+  mediaType.value = content.banner_media_type || 'image';
+  videoUrl.value = content.banner_video_url || '';
+
+  function updateVideoCurrent() {
+    videoCurrent.hidden = !content.banner_video_file;
+    videoCurrent.textContent = content.banner_video_file ? 'Ya hay un video subido - subir uno nuevo lo reemplaza.' : '';
+  }
+  updateVideoCurrent();
+
+  function toggleMediaBlocks() {
+    const type = mediaType.value;
+    imageBlock.hidden = type !== 'image';
+    videoBlock.hidden = type !== 'video';
+    videoUploadBlock.hidden = type !== 'video';
+    galleryBlock.hidden = type !== 'gallery';
+    if (type === 'gallery') loadBannerGalleryAdmin();
+  }
+  toggleMediaBlocks();
+  mediaType.onchange = toggleMediaBlocks;
+
+  // Al pegar cualquier link de YouTube/Instagram, lo dejamos en formato embed
+  // automáticamente - mismo criterio que "Próximo evento".
+  videoUrl.addEventListener('blur', () => {
+    const parsed = parseVideoUrl(videoUrl.value);
+    if (!parsed) return;
+    videoUrl.value = parsed.storedUrl;
+  });
+
+  videoInput.onchange = async () => {
+    const file = videoInput.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('video', file);
+    formData.append('key', 'banner_video_file');
+    try {
+      const data = await api('/api/admin/content/video', { method: 'POST', body: formData });
+      content.banner_video_file = data.url;
+      updateVideoCurrent();
+      alert('Video subido correctamente.');
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      videoInput.value = '';
+    }
+  };
+
+  const galleryUploadInput = document.getElementById('banner-gallery-upload-input');
+  galleryUploadInput.onchange = async () => {
+    const file = galleryUploadInput.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append('image', file);
+    try {
+      await api('/api/admin/banner-gallery', { method: 'POST', body: formData });
+      await loadBannerGalleryAdmin();
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      galleryUploadInput.value = '';
+    }
+  };
+
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    status.textContent = 'Guardando...';
+    status.className = 'form-status';
+    const parsed = parseVideoUrl(videoUrl.value);
+    try {
+      await api('/api/admin/content', {
+        method: 'PUT',
+        body: JSON.stringify({
+          banner_media_type: mediaType.value,
+          banner_video_url: parsed ? parsed.storedUrl : videoUrl.value
         })
       });
       status.textContent = 'Guardado ✓';

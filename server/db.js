@@ -85,6 +85,7 @@ async function connect() {
 async function ensureIndexes() {
   const db = getDb();
   await db.collection('gallery_images').createIndex({ position: 1 });
+  await db.collection('banner_gallery_images').createIndex({ position: 1 });
   await db.collection('social_links').createIndex({ position: 1 });
   await db.collection('testimonials').createIndex({ status: 1, position: 1 });
   await db.collection('contact_messages').createIndex({ created_at: -1 });
@@ -114,7 +115,15 @@ const BASE_CONTENT = {
   nav_testimonios_label: 'Testimonios',
   nav_contacto_label: 'Contacto',
 
+  // Tipo de portada: 'image' (foto, de siempre), 'video' (un archivo subido o un link
+  // externo pegado) o 'gallery' (varias fotos con transición automática, útil por
+  // ejemplo para mostrar el avance de obra de un edificio). Default 'image' a propósito,
+  // así el contenido ya cargado en sitios existentes sigue mostrando la foto de siempre
+  // sin que haga falta tocar nada.
+  banner_media_type: 'image',
   banner_image: '',
+  banner_video_url: '',
+  banner_video_file: '',
   banner_title: 'Tu Salón de Eventos',
   banner_subtitle: 'Esto es una demo de FrontyBack: un sitio real, con un panel donde vos mismo editás textos y fotos, sin depender de nadie.',
 
@@ -475,6 +484,7 @@ async function resetDemo() {
   const rubro = currentRubro();
   await db.collection('content').updateOne({ _id: 'main' }, { $set: contentForRubro(rubro) }, { upsert: true });
   await db.collection('gallery_images').deleteMany({});
+  await db.collection('banner_gallery_images').deleteMany({});
   await db.collection('social_links').deleteMany({});
   await db.collection('testimonials').deleteMany({});
   await db.collection('product_categories').deleteMany({});
