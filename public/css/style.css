@@ -218,7 +218,22 @@ h1, h2, h3 { font-family: var(--font-display); font-weight: 400; line-height: 1.
    aspect-ratio propio, para que ocupe todo el alto del hero en vez de quedar recortado
    a una caja 16:9 chica. */
 .hero-video { width: 100%; height: 100%; object-fit: cover; }
-.hero-video-frame.video-frame { position: absolute; inset: 0; aspect-ratio: auto; }
+.hero-video-frame.video-frame { position: absolute; inset: 0; aspect-ratio: auto; overflow: hidden; }
+/* El iframe de YouTube no soporta object-fit: cover (el player interno respeta el 16:9
+   del video y deja franjas si el marco no es esa proporción) - se lo sobredimensiona en
+   base al viewport y se centra, para que el video desborde el marco en vez de dejar
+   barras, igual que el truco clásico de "video de fondo" con YouTube. */
+.hero-video-frame.video-frame iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 56.25vw; /* 100 * 9/16 */
+  min-height: 100%;
+  min-width: 177.78vh; /* 100 * 16/9 */
+  transform: translate(-50%, -50%);
+  border: 0;
+}
 
 /* Portada en modo galería: fotos superpuestas ocupando todo el hero, solo la ".active"
    visible - el cambio entre una y otra es un fade de opacity (renderHero en main.js

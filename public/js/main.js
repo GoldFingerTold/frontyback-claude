@@ -174,7 +174,7 @@ function renderHero(content, bannerGallery) {
     return;
   }
   if (mediaType === 'video' && content.banner_video_url) {
-    renderVideoEmbed({ videoWrap, videoEl: videoEmbed, igWrap }, content.banner_video_url);
+    renderVideoEmbed({ videoWrap, videoEl: videoEmbed, igWrap }, content.banner_video_url, { autoplayLoop: true });
     if (placeholder) placeholder.hidden = true;
     return;
   }
@@ -281,6 +281,7 @@ function parseVideoUrl(url) {
   if (match) {
     return {
       platform: 'youtube',
+      videoId: match[1],
       embedUrl: `https://www.youtube.com/embed/${match[1]}`,
       vertical: /youtube\.com\/shorts\//.test(trimmed)
     };
@@ -330,7 +331,7 @@ function renderInstagramEmbed(container, permalink) {
 // tanto por "Próximo evento" como por la portada, para no duplicar esta lógica entre
 // las dos. Devuelve si el link resultó vertical (Shorts/Reel), para que quien llama
 // decida si angostar el marco.
-function renderVideoEmbed({ videoWrap, videoEl, igWrap }, videoUrl) {
+function renderVideoEmbed({ videoWrap, videoEl, igWrap }, videoUrl, options = {}) {
   if (!videoUrl) {
     videoWrap.hidden = true;
     return { vertical: false };
@@ -346,7 +347,11 @@ function renderVideoEmbed({ videoWrap, videoEl, igWrap }, videoUrl) {
     igWrap.hidden = true;
     igWrap.innerHTML = '';
     videoEl.hidden = false;
-    videoEl.src = parsed ? parsed.embedUrl : videoUrl;
+    let src = parsed ? parsed.embedUrl : videoUrl;
+    if (options.autoplayLoop && parsed && parsed.platform === 'youtube') {
+      src += `?autoplay=1&mute=1&loop=1&playlist=${parsed.videoId}&controls=0&modestbranding=1&playsinline=1&rel=0`;
+    }
+    videoEl.src = src;
   }
 
   videoWrap.hidden = false;
