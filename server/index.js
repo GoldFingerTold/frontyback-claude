@@ -56,7 +56,8 @@ const RUBRO_BY_HOST = {
   'bares.frontyback.com': 'bares',
   'cafes.frontyback.com': 'cafes',
   'resto.frontyback.com': 'resto',
-  'inmo.frontyback.com': 'inmo'
+  'inmo.frontyback.com': 'inmo',
+  'muelita.frontyback.com': 'muelita'
 };
 
 function resolveRubro(req) {

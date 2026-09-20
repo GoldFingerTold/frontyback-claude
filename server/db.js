@@ -29,7 +29,7 @@ if (!uri) {
 const client = new MongoClient(uri);
 
 // --- Rubros y a qué base va cada uno ---
-const RUBROS = ['eventos', 'bares', 'cafes', 'resto', 'inmo'];
+const RUBROS = ['eventos', 'bares', 'cafes', 'resto', 'inmo', 'muelita'];
 const DEFAULT_RUBRO = 'eventos';
 
 // Si el connection string apunta a una base "-dev", las bases por rubro también llevan
@@ -46,7 +46,8 @@ const DB_NAME_BY_RUBRO = {
   bares: 'frontyback-bares' + DEV_SUFFIX,
   cafes: 'frontyback-cafes' + DEV_SUFFIX,
   resto: 'frontyback-resto' + DEV_SUFFIX,
-  inmo: 'frontyback-inmo' + DEV_SUFFIX
+  inmo: 'frontyback-inmo' + DEV_SUFFIX,
+  muelita: 'frontyback-muelita' + DEV_SUFFIX
 };
 
 const dbs = new Map(); // rubro -> Db
@@ -286,6 +287,35 @@ const RUBRO_OVERRIDES = {
     productos_heading: 'Tipologías y precios',
     productos_subheading: 'Escaneá para ver',
     contact_subheading: '¿Querés un sitio así para tu inmobiliaria?'
+  },
+
+  muelita: {
+    site_name: 'Tu Consultorio Dental',
+    accent_color: '#1690a3',
+    nav_servicios_label: 'Servicios',
+    nav_salon_label: 'Consultorio',
+    nav_productos_label: 'Tratamientos',
+    banner_title: 'Tu Consultorio Dental',
+    banner_subtitle: 'Odontología general, estética y ortodoncia para toda la familia. Editá los textos, las fotos y los tratamientos desde tu panel, cuando quieras.',
+    stat_1_number: '15',
+    stat_1_label: 'Años de experiencia',
+    stat_2_number: '3000+',
+    stat_2_label: 'Pacientes atendidos',
+    stat_3_number: '5',
+    stat_3_label: 'Especialidades',
+    servicios_heading: 'Nuestros servicios',
+    servicios_subheading: 'Salud y estética dental para toda la familia',
+    servicios_text: [
+      'Contá tu propuesta: odontología general, limpieza y prevención, blanqueamiento, ortodoncia e implantes.',
+      'Cada servicio es un párrafo aparte. Sumá urgencias, odontopediatría y financiación en cuotas; se editan desde el panel.',
+      'Mostrá el avance de un tratamiento de ortodoncia o un caso de estética, subiendo fotos vos mismo cuando quieras.'
+    ].join('\n\n'),
+    salon_heading: 'Nuestro consultorio',
+    salon_subheading: 'Así se ve nuestro espacio',
+    salon_text: 'Mostrá el consultorio, el equipamiento y la sala de espera. Las fotos se suben, borran y reordenan desde el panel en segundos.',
+    productos_heading: 'Nuestros tratamientos',
+    productos_subheading: 'Escaneá para ver',
+    contact_subheading: '¿Querés un sitio así para tu consultorio?'
   }
 };
 
@@ -407,6 +437,37 @@ const PRODUCTS_BY_RUBRO = {
       products: [
         { name: 'Anticipo 30% + 40 cuotas en pesos', price: 'Ajuste CAC' },
         { name: 'Contado', price: '10% de descuento' }
+      ]
+    }
+  ],
+  muelita: [
+    {
+      name: 'Consultas',
+      products: [
+        { name: 'Consulta y diagnóstico', price: '$8.000' },
+        { name: 'Limpieza (profilaxis)', price: '$12.000' },
+        { name: 'Urgencia', price: '$15.000' }
+      ]
+    },
+    {
+      name: 'Estética',
+      products: [
+        { name: 'Blanqueamiento dental', price: 'Desde $45.000' },
+        { name: 'Carilla de resina (por pieza)', price: 'Desde $35.000' }
+      ]
+    },
+    {
+      name: 'Ortodoncia',
+      products: [
+        { name: 'Brackets metálicos (tratamiento completo)', price: 'Desde $600.000' },
+        { name: 'Alineadores estéticos (tratamiento completo)', price: 'Desde $900.000' }
+      ]
+    },
+    {
+      name: 'Implantes',
+      products: [
+        { name: 'Implante unitario', price: 'Desde $280.000' },
+        { name: 'Corona sobre implante', price: 'Desde $180.000' }
       ]
     }
   ]
