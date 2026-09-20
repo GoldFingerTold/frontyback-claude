@@ -16,7 +16,7 @@ const FIELD_GROUPS = [
     fields: [
       { key: 'nav_home_label', label: 'Etiqueta "Inicio"', type: 'text' },
       { key: 'nav_servicios_label', label: 'Etiqueta "Servicios"', type: 'text' },
-      { key: 'nav_salon_label', label: 'Etiqueta "El Salón"', type: 'text' },
+      { key: 'nav_salon_label', label: (content) => `Etiqueta "${content.salon_heading || 'El Salón'}"`, type: 'text' },
       { key: 'nav_testimonios_label', label: 'Etiqueta "Testimonios"', type: 'text' },
       { key: 'nav_contacto_label', label: 'Etiqueta "Contacto"', type: 'text' }
     ]
@@ -48,7 +48,7 @@ const FIELD_GROUPS = [
     ]
   },
   {
-    title: 'El Salón',
+    title: (content) => content.salon_heading || 'El Salón',
     fields: [
       { key: 'salon_heading', label: 'Título', type: 'text' },
       { key: 'salon_subheading', label: 'Antetítulo', type: 'text' },
@@ -211,14 +211,14 @@ async function loadContentTab() {
     const groupEl = document.createElement('div');
     groupEl.className = 'field-group';
     const h3 = document.createElement('h3');
-    h3.textContent = group.title;
+    h3.textContent = typeof group.title === 'function' ? group.title(content) : group.title;
     groupEl.appendChild(h3);
 
     group.fields.forEach((field) => {
       const wrap = document.createElement('div');
       wrap.className = 'field';
       const label = document.createElement('label');
-      label.textContent = field.label;
+      label.textContent = typeof field.label === 'function' ? field.label(content) : field.label;
       label.setAttribute('for', `field-${field.key}`);
       wrap.appendChild(label);
 
@@ -277,6 +277,12 @@ async function loadFotosTab() {
 
   initProximoEvento(content);
   initBannerMedia(content);
+
+  const gallerySectionTitle = document.getElementById('gallery-section-title');
+  const gallerySectionHint = document.getElementById('gallery-section-hint');
+  const salonLabel = content.salon_heading || 'El Salón';
+  if (gallerySectionTitle) gallerySectionTitle.textContent = `Galería de "${salonLabel}"`;
+  if (gallerySectionHint) gallerySectionHint.textContent = `Subí, borrá o reordená (con las flechas) las fotos que se ven en la sección "${salonLabel}".`;
 
   document.querySelectorAll('.image-replace').forEach((el) => {
     const key = el.dataset.key;
