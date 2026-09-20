@@ -29,7 +29,7 @@ if (!uri) {
 const client = new MongoClient(uri);
 
 // --- Rubros y a qué base va cada uno ---
-const RUBROS = ['eventos', 'bares', 'cafes', 'resto', 'inmo', 'muelita'];
+const RUBROS = ['eventos', 'bares', 'cafes', 'resto', 'inmo', 'muelita', 'toguita', 'curita', 'cuentita'];
 const DEFAULT_RUBRO = 'eventos';
 
 // Si el connection string apunta a una base "-dev", las bases por rubro también llevan
@@ -47,7 +47,10 @@ const DB_NAME_BY_RUBRO = {
   cafes: 'frontyback-cafes' + DEV_SUFFIX,
   resto: 'frontyback-resto' + DEV_SUFFIX,
   inmo: 'frontyback-inmo' + DEV_SUFFIX,
-  muelita: 'frontyback-muelita' + DEV_SUFFIX
+  muelita: 'frontyback-muelita' + DEV_SUFFIX,
+  toguita: 'frontyback-toguita' + DEV_SUFFIX,
+  curita: 'frontyback-curita' + DEV_SUFFIX,
+  cuentita: 'frontyback-cuentita' + DEV_SUFFIX
 };
 
 const dbs = new Map(); // rubro -> Db
@@ -316,6 +319,93 @@ const RUBRO_OVERRIDES = {
     productos_heading: 'Nuestros tratamientos',
     productos_subheading: 'Escaneá para ver',
     contact_subheading: '¿Querés un sitio así para tu consultorio?'
+  },
+
+  toguita: {
+    site_name: 'Tu Estudio Jurídico',
+    accent_color: '#5c1a2e',
+    nav_servicios_label: 'Áreas',
+    nav_salon_label: 'Estudio',
+    nav_productos_label: 'Honorarios',
+    banner_title: 'Tu Estudio Jurídico',
+    banner_subtitle: 'Asesoramiento legal claro, en las áreas que tu empresa o vos necesiten. Editá los textos, las fotos y los honorarios desde tu panel, cuando quieras.',
+    stat_1_number: '20',
+    stat_1_label: 'Años de trayectoria',
+    stat_2_number: '500+',
+    stat_2_label: 'Casos resueltos',
+    stat_3_number: '4',
+    stat_3_label: 'Áreas de práctica',
+    servicios_heading: 'Áreas de práctica',
+    servicios_subheading: 'Asesoramiento integral para vos o tu empresa',
+    servicios_text: [
+      'Contá tu propuesta: derecho civil y comercial, derecho laboral, familia y sucesiones, y defensa del consumidor.',
+      'Cada área es un párrafo aparte. Sumá contratos, cobranzas y mediación; se editan desde el panel en segundos.',
+      'Actualizá los honorarios y las áreas que atendés vos mismo, sin depender de nadie.'
+    ].join('\n\n'),
+    salon_heading: 'Nuestro estudio',
+    salon_subheading: 'Así se ve nuestro espacio',
+    salon_text: 'Mostrá las oficinas, la sala de reuniones y el equipo. Las fotos se suben, borran y reordenan desde el panel en segundos.',
+    productos_heading: 'Consultas y honorarios',
+    productos_subheading: 'Escaneá para ver',
+    contact_subheading: '¿Querés un sitio así para tu estudio?'
+  },
+
+  curita: {
+    site_name: 'Tu Consultorio Médico',
+    accent_color: '#2f7dd1',
+    nav_servicios_label: 'Especialidades',
+    nav_salon_label: 'Consultorio',
+    nav_productos_label: 'Consultas',
+    banner_title: 'Tu Consultorio Médico',
+    banner_subtitle: 'Atención médica cercana, con turnos claros y especialistas para toda la familia. Editá los textos, las fotos y las especialidades desde tu panel.',
+    stat_1_number: '12',
+    stat_1_label: 'Especialidades médicas',
+    stat_2_number: '8',
+    stat_2_label: 'Años atendiendo el barrio',
+    stat_3_number: '5000+',
+    stat_3_label: 'Pacientes atendidos',
+    servicios_heading: 'Nuestras especialidades',
+    servicios_subheading: 'Atención integral para toda la familia',
+    servicios_text: [
+      'Contá tu propuesta: clínica médica, pediatría, ginecología, cardiología y laboratorio de análisis.',
+      'Cada especialidad es un párrafo aparte. Sumá guardia, estudios por imágenes y turnos online; se editan desde el panel.',
+      'Publicá las especialidades y los turnos disponibles vos mismo, a medida que sumás profesionales.'
+    ].join('\n\n'),
+    salon_heading: 'Nuestro consultorio',
+    salon_subheading: 'Así se ve nuestro espacio',
+    salon_text: 'Mostrá los consultorios, el equipamiento y la sala de espera. Las fotos se administran desde el panel.',
+    productos_heading: 'Consultas y especialidades',
+    productos_subheading: 'Escaneá para ver',
+    contact_subheading: '¿Querés un sitio así para tu consultorio?'
+  },
+
+  cuentita: {
+    site_name: 'Tu Estudio Contable',
+    accent_color: '#a67c1e',
+    nav_servicios_label: 'Servicios',
+    nav_salon_label: 'Estudio',
+    nav_productos_label: 'Honorarios',
+    banner_title: 'Tu Estudio Contable',
+    banner_subtitle: 'Impuestos al día, liquidación de sueldos y asesoramiento para que tu negocio crezca tranquilo. Editá los textos, las fotos y los honorarios desde tu panel.',
+    stat_1_number: '18',
+    stat_1_label: 'Años de trayectoria',
+    stat_2_number: '200+',
+    stat_2_label: 'Empresas asesoradas',
+    stat_3_number: '3',
+    stat_3_label: 'Áreas de servicio',
+    servicios_heading: 'Nuestros servicios',
+    servicios_subheading: 'Todo lo que tu negocio necesita en un solo lugar',
+    servicios_text: [
+      'Contá tu propuesta: monotributo y autónomos, liquidación de sueldos, balances y asesoramiento impositivo.',
+      'Cada servicio es un párrafo aparte. Sumá constitución de sociedades y auditoría; se editan desde el panel.',
+      'Actualizá los honorarios y los servicios que ofrecés vos mismo, cuando haga falta.'
+    ].join('\n\n'),
+    salon_heading: 'Nuestro estudio',
+    salon_subheading: 'Así se ve nuestro espacio',
+    salon_text: 'Mostrá las oficinas y el equipo de trabajo. Las fotos se suben, borran y reordenan desde el panel en segundos.',
+    productos_heading: 'Servicios y honorarios',
+    productos_subheading: 'Escaneá para ver',
+    contact_subheading: '¿Querés un sitio así para tu estudio?'
   }
 };
 
@@ -468,6 +558,83 @@ const PRODUCTS_BY_RUBRO = {
       products: [
         { name: 'Implante unitario', price: 'Desde $280.000' },
         { name: 'Corona sobre implante', price: 'Desde $180.000' }
+      ]
+    }
+  ],
+  toguita: [
+    {
+      name: 'Consultas',
+      products: [
+        { name: 'Consulta inicial', price: '$25.000' },
+        { name: 'Consulta urgente', price: '$40.000' }
+      ]
+    },
+    {
+      name: 'Derecho civil y comercial',
+      products: [
+        { name: 'Redacción de contrato', price: 'Desde $60.000' },
+        { name: 'Reclamo extrajudicial', price: 'Desde $80.000' }
+      ]
+    },
+    {
+      name: 'Derecho laboral',
+      products: [
+        { name: 'Liquidación final y despido', price: 'Desde $90.000' },
+        { name: 'Asesoramiento a empresas (mensual)', price: 'Desde $70.000' }
+      ]
+    },
+    {
+      name: 'Familia y sucesiones',
+      products: [
+        { name: 'Sucesión (honorarios base)', price: 'Desde $150.000' },
+        { name: 'Divorcio de común acuerdo', price: 'Desde $120.000' }
+      ]
+    }
+  ],
+  curita: [
+    {
+      name: 'Consultas',
+      products: [
+        { name: 'Consulta clínica general', price: '$9.000' },
+        { name: 'Consulta pediátrica', price: '$9.500' }
+      ]
+    },
+    {
+      name: 'Especialidades',
+      products: [
+        { name: 'Cardiología', price: '$12.000' },
+        { name: 'Ginecología', price: '$12.000' },
+        { name: 'Dermatología', price: '$11.000' }
+      ]
+    },
+    {
+      name: 'Estudios',
+      products: [
+        { name: 'Análisis de laboratorio (básico)', price: 'Desde $14.000' },
+        { name: 'Electrocardiograma', price: '$10.000' }
+      ]
+    }
+  ],
+  cuentita: [
+    {
+      name: 'Monotributo y autónomos',
+      products: [
+        { name: 'Alta de monotributo', price: '$25.000' },
+        { name: 'Liquidación mensual', price: 'Desde $15.000' }
+      ]
+    },
+    {
+      name: 'Liquidación de sueldos',
+      products: [
+        { name: 'Por empleado (mensual)', price: '$6.000' },
+        { name: 'Alta/baja de personal', price: '$10.000' }
+      ]
+    },
+    {
+      name: 'Balances y asesoramiento',
+      products: [
+        { name: 'Balance anual (PyME)', price: 'Desde $180.000' },
+        { name: 'Asesoramiento impositivo (mensual)', price: 'Desde $50.000' }
       ]
     }
   ]
