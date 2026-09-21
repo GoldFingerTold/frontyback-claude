@@ -57,10 +57,10 @@ const RUBRO_BY_HOST = {
   'cafes.frontyback.com': 'cafes',
   'resto.frontyback.com': 'resto',
   'inmo.frontyback.com': 'inmo',
-  'muelita.frontyback.com': 'muelita',
-  'toguita.frontyback.com': 'toguita',
-  'curita.frontyback.com': 'curita',
-  'cuentita.frontyback.com': 'cuentita',
+  'odont.frontyback.com': 'odont',
+  'abg.frontyback.com': 'abg',
+  'dr.frontyback.com': 'dr',
+  'cont.frontyback.com': 'cont',
   'gym.frontyback.com': 'gym',
   'tiendas.frontyback.com': 'tiendas'
 };

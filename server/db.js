@@ -29,7 +29,7 @@ if (!uri) {
 const client = new MongoClient(uri);
 
 // --- Rubros y a qué base va cada uno ---
-const RUBROS = ['eventos', 'bares', 'cafes', 'resto', 'inmo', 'muelita', 'toguita', 'curita', 'cuentita', 'gym', 'tiendas'];
+const RUBROS = ['eventos', 'bares', 'cafes', 'resto', 'inmo', 'odont', 'abg', 'dr', 'cont', 'gym', 'tiendas'];
 const DEFAULT_RUBRO = 'eventos';
 
 // Si el connection string apunta a una base "-dev", las bases por rubro también llevan
@@ -47,10 +47,14 @@ const DB_NAME_BY_RUBRO = {
   cafes: 'frontyback-cafes' + DEV_SUFFIX,
   resto: 'frontyback-resto' + DEV_SUFFIX,
   inmo: 'frontyback-inmo' + DEV_SUFFIX,
-  muelita: 'frontyback-muelita' + DEV_SUFFIX,
-  toguita: 'frontyback-toguita' + DEV_SUFFIX,
-  curita: 'frontyback-curita' + DEV_SUFFIX,
-  cuentita: 'frontyback-cuentita' + DEV_SUFFIX,
+  // Los nombres de base quedan como estaban (muelita/toguita/curita/cuentita) aunque el
+  // rubro se haya rebautizado a odont/abg/dr/cont - cambiar el nombre de la base
+  // implicaría migrar los datos, y así se conserva todo lo que Hugo ya cargó sin tocar
+  // nada.
+  odont: 'frontyback-muelita' + DEV_SUFFIX,
+  abg: 'frontyback-toguita' + DEV_SUFFIX,
+  dr: 'frontyback-curita' + DEV_SUFFIX,
+  cont: 'frontyback-cuentita' + DEV_SUFFIX,
   gym: 'frontyback-gym' + DEV_SUFFIX,
   tiendas: 'frontyback-tiendas' + DEV_SUFFIX
 };
@@ -294,7 +298,7 @@ const RUBRO_OVERRIDES = {
     contact_subheading: '¿Querés un sitio así para tu inmobiliaria?'
   },
 
-  muelita: {
+  odont: {
     site_name: 'Tu Consultorio Dental',
     accent_color: '#1690a3',
     nav_servicios_label: 'Servicios',
@@ -323,7 +327,7 @@ const RUBRO_OVERRIDES = {
     contact_subheading: '¿Querés un sitio así para tu consultorio?'
   },
 
-  toguita: {
+  abg: {
     site_name: 'Tu Estudio Jurídico',
     accent_color: '#5c1a2e',
     nav_servicios_label: 'Áreas',
@@ -352,7 +356,7 @@ const RUBRO_OVERRIDES = {
     contact_subheading: '¿Querés un sitio así para tu estudio?'
   },
 
-  curita: {
+  dr: {
     site_name: 'Tu Consultorio Médico',
     accent_color: '#2f7dd1',
     nav_servicios_label: 'Especialidades',
@@ -381,7 +385,7 @@ const RUBRO_OVERRIDES = {
     contact_subheading: '¿Querés un sitio así para tu consultorio?'
   },
 
-  cuentita: {
+  cont: {
     site_name: 'Tu Estudio Contable',
     accent_color: '#a67c1e',
     nav_servicios_label: 'Servicios',
@@ -590,7 +594,7 @@ const PRODUCTS_BY_RUBRO = {
       ]
     }
   ],
-  muelita: [
+  odont: [
     {
       name: 'Consultas',
       products: [
@@ -621,7 +625,7 @@ const PRODUCTS_BY_RUBRO = {
       ]
     }
   ],
-  toguita: [
+  abg: [
     {
       name: 'Consultas',
       products: [
@@ -651,7 +655,7 @@ const PRODUCTS_BY_RUBRO = {
       ]
     }
   ],
-  curita: [
+  dr: [
     {
       name: 'Consultas',
       products: [
@@ -675,7 +679,7 @@ const PRODUCTS_BY_RUBRO = {
       ]
     }
   ],
-  cuentita: [
+  cont: [
     {
       name: 'Monotributo y autónomos',
       products: [
