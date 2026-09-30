@@ -37,6 +37,7 @@ app.use(express.json());
 // cachea el CSS/JS por muchísimo tiempo (más de una hora, visto en la práctica) sin
 // importar el ?v=N de la URL ni que el archivo cambie - queda sirviendo una versión vieja.
 const staticOptions = {
+  extensions: ['html'],
   setHeaders: (res) => {
     res.setHeader('Cache-Control', 'no-store, must-revalidate');
   }
