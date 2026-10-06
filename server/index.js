@@ -111,6 +111,54 @@ app.use(
   })
 );
 
+// Manifest de PWA, uno distinto por rubro (nombre y start_url propios) - para que cada
+// demo se pueda "instalar" como si fuera su propia app, parte de mostrarle al cliente que
+// con FrontyBack se lleva un sitio Y una app, no solo una página.
+const RUBRO_NOMBRE = {
+  eventos: 'Eventos', bares: 'Bar', cafes: 'Café', resto: 'Restaurante', inmo: 'Inmobiliaria',
+  odont: 'Odontología', abg: 'Estudio Jurídico', dr: 'Consultorio', cont: 'Estudio Contable',
+  gym: 'Gimnasio', tiendas: 'Tienda'
+};
+app.get('/manifest.json', (req, res) => {
+  const nombreRubro = RUBRO_NOMBRE[req.rubro] || 'FrontyBack';
+  res.json({
+    name: `${nombreRubro} — Demo FrontyBack`,
+    short_name: nombreRubro,
+    description: 'Sitio con panel de administración propio, editable sin depender de nadie.',
+    start_url: '/',
+    scope: '/',
+    display: 'standalone',
+    background_color: '#ffffff',
+    theme_color: '#2f5fe0',
+    icons: [
+      { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+      { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+    ]
+  });
+});
+
+// El panel de administración se instala como una app aparte de la del sitio público, así
+// que cuando se abre desde la pantalla de inicio lleva directo a /admin, no a la demo.
+app.get('/admin/manifest.json', (req, res) => {
+  const nombreRubro = RUBRO_NOMBRE[req.rubro] || 'FrontyBack';
+  res.json({
+    name: `Panel ${nombreRubro} — Demo FrontyBack`,
+    short_name: `Panel ${nombreRubro}`,
+    description: 'Panel de administración del sitio, para editar textos y fotos.',
+    start_url: '/admin',
+    scope: '/admin',
+    display: 'standalone',
+    background_color: '#ffffff',
+    theme_color: '#2f5fe0',
+    icons: [
+      { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+      { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' }
+    ]
+  });
+});
+
 // Archivos estáticos del sitio público: la demo, las imágenes semilla y lo subido desde
 // el panel. (Ya se resolvió el rubro y se entró en su contexto más arriba.)
 app.use(express.static(path.join(__dirname, '..', 'public'), staticOptions));
