@@ -87,13 +87,15 @@
     background: rgba(10, 10, 10, 0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid rgba(245, 158, 11, 0.12);
   }
-  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
-  .marca { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-  .marca img { width: 40px; height: 40px; border-radius: 10px; }
-  .marca b { display: block; font-size: 0.98rem; letter-spacing: 0.14em; font-weight: 800; line-height: 1.1; }
-  .marca small { display: block; font-size: 0.68rem; letter-spacing: 0.2em; color: var(--gold); font-weight: 600; }
-  .links { display: none; gap: 28px; align-items: center; }
-  .links a { text-decoration: none; color: var(--ink-soft); font-size: 0.93rem; font-weight: 500; transition: color .2s; }
+  /* Crece con el ancho de pantalla: 68px en celular, hasta 92px en escritorio */
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: clamp(68px, 6.4vw, 92px); gap: 16px; }
+  .marca { display: flex; align-items: center; gap: clamp(12px, 1.1vw, 16px); text-decoration: none; }
+  .marca img { width: clamp(40px, 3.9vw, 58px); height: clamp(40px, 3.9vw, 58px); border-radius: clamp(10px, 1vw, 14px); }
+  .marca b { display: block; font-size: clamp(0.98rem, 1.25vw, 1.25rem); letter-spacing: 0.14em; font-weight: 800; line-height: 1.1; }
+  .marca small { display: block; font-size: clamp(0.68rem, 0.85vw, 0.82rem); letter-spacing: 0.2em; color: var(--gold); font-weight: 600; }
+  .links { display: none; gap: clamp(28px, 2.6vw, 40px); align-items: center; }
+  .links a { text-decoration: none; color: var(--ink-soft); font-size: clamp(0.93rem, 1.05vw, 1.05rem); font-weight: 500; transition: color .2s; }
+  .nav .btn-chico { padding: clamp(9px, 0.8vw, 12px) clamp(18px, 1.7vw, 24px); font-size: clamp(0.9rem, 1vw, 1rem); }
   .links a:hover { color: var(--ink); }
   @media (min-width: 860px) { .links { display: flex; } }
 
