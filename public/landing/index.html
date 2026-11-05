@@ -4,248 +4,512 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="facebook-domain-verification" content="ty119hqrytckc7hkmm9ngw5ijddptm" />
-<title>FrontyBack — Tu web, editable por vos</title>
-<meta name="description" content="FrontyBack: te hago un sitio web con un panel para que edites textos y fotos vos mismo, cuando quieras, sin depender de nadie. Se instala como app en el celular. Mirá ejemplos según tu rubro.">
-<meta property="og:title" content="FrontyBack — Tu web, editable por vos">
-<meta property="og:description" content="Un sitio web con panel propio para editarlo vos mismo, y que se instala como app. Mirá un ejemplo de tu rubro.">
+<title>FrontyBack — Web, CRM e IA para tu negocio</title>
+<meta name="description" content="FrontyBack: tu sitio web a medida con panel para editarlo vos mismo, que se instala como app; CRM integrado para tus consultas y ventas, y automatizaciones con IA. Mirá un ejemplo de tu rubro.">
+<meta property="og:title" content="FrontyBack — Web, CRM e IA para tu negocio">
+<meta property="og:description" content="Tu web editable por vos, tu CRM y tu IA, todo bajo tu control. Mirá un ejemplo de tu rubro.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://frontyback.com">
+<meta property="og:image" content="https://frontyback.com/logo-fronty.png">
+<meta name="theme-color" content="#0A0A0A">
 <link rel="canonical" href="https://frontyback.com/">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-fronty-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-fronty-16.png">
 <link rel="apple-touch-icon" href="/apple-touch-fronty.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "FrontyBack",
+  "url": "https://frontyback.com/",
+  "logo": "https://frontyback.com/logo-fronty.png",
+  "description": "Sitios web a medida con panel autogestionable e instalación tipo app, CRM integrado y automatizaciones con inteligencia artificial para negocios.",
+  "telephone": "+5491162195243",
+  "areaServed": "AR",
+  "founder": { "@type": "Person", "name": "Hugo José Ceriani" },
+  "makesOffer": [
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sitio web editable con panel propio" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "CRM para consultas y ventas" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Automatizaciones con inteligencia artificial" } }
+  ]
+}
+</script>
 <style>
-  /* Landing de marca: se fija en oscuro para todos los visitantes (decisión de Hugo,
-     resalta más y la diferencia de las demos, que son claras). No sigue el
-     prefers-color-scheme del navegador a propósito. */
+  /* Landing de marca: siempre oscura (decisión de Hugo). Negro mate + oro pulido. */
   :root {
-    --bg: #17161a;
-    --surface: #201f25;
-    --ink: #f3f1ec;
-    --ink-soft: rgba(243, 241, 236, 0.60);
-    --line: rgba(243, 241, 236, 0.14);
-    --blue: #5b83f5;
-    --orange: #e08a1e;
-    --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-    --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    --bg: #0A0A0A;
+    --bg-2: #111111;
+    --card: #161616;
+    --ink: #F5F5F5;
+    --ink-soft: #A3A3A3;
+    --ink-faint: #737373;
+    --line: rgba(245, 158, 11, 0.20);
+    --line-hi: rgba(229, 193, 88, 0.55);
+    --gold: #D4AF37;
+    --gold-grad: linear-gradient(135deg, #E5C158 0%, #D4AF37 50%, #AA7C11 100%);
+    --glow: 0 0 0 1px rgba(229, 193, 88, 0.35), 0 10px 40px -10px rgba(212, 175, 55, 0.35);
+    --radius: 18px;
+    --font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
   }
-
   * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--font);
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: var(--font); line-height: 1.6; -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
-  .wrap {
-    max-width: 980px;
-    margin: 0 auto;
-    padding: clamp(32px, 7vw, 80px) 20px 64px;
-  }
+  a { color: inherit; }
+  img { max-width: 100%; display: block; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 8px; }
+  .wrap { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+  .ic { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .oro { background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
-  header { text-align: center; }
-  .logo {
-    width: 110px;
-    height: 110px;
-    display: block;
-    margin: 0 auto 22px;
-    border-radius: 24px;
+  /* Botones */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 14px 24px; border-radius: 999px; font-weight: 700; font-size: 0.98rem;
+    text-decoration: none; transition: transform .2s ease, box-shadow .2s ease, background-color .2s ease, border-color .2s ease;
   }
-  h1 {
-    font-size: clamp(1.9rem, 5vw, 2.9rem);
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    margin: 0 0 14px;
-  }
-  .tagline {
-    font-size: clamp(1.05rem, 2.6vw, 1.35rem);
-    color: var(--ink-soft);
-    margin: 0 auto 10px;
-    max-width: 34ch;
-  }
-  .pitch {
-    font-size: 1rem;
-    color: var(--ink-soft);
-    max-width: 52ch;
-    margin: 18px auto 0;
-  }
+  .btn .ic { width: 20px; height: 20px; stroke-width: 2; }
+  .btn-oro { background: var(--gold-grad); color: #0A0A0A; font-weight: 800; box-shadow: 0 8px 28px -8px rgba(212, 175, 55, 0.55); }
+  .btn-oro:hover { transform: translateY(-2px); box-shadow: 0 14px 38px -8px rgba(212, 175, 55, 0.75); }
+  .btn-linea { border: 1px solid var(--line-hi); color: var(--ink); background: rgba(212, 175, 55, 0.04); }
+  .btn-linea:hover { border-color: #E5C158; background: rgba(212, 175, 55, 0.10); box-shadow: var(--glow); }
+  .btn-chico { padding: 9px 18px; font-size: 0.9rem; }
 
-  .demos {
-    margin: clamp(38px, 8vw, 64px) 0 0;
+  /* Navbar */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(10, 10, 10, 0.72); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(245, 158, 11, 0.12);
   }
-  .demos h2 {
-    text-align: center;
-    font-size: 0.82rem;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--ink-soft);
-    font-weight: 700;
-    margin: 0 0 20px;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-  @media (min-width: 600px) { .grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (min-width: 900px) { .grid { grid-template-columns: repeat(5, 1fr); } }
-  .card {
-    display: block;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 22px 20px;
-    text-decoration: none;
-    color: inherit;
-    box-shadow: var(--shadow);
-    transition: transform .15s ease, border-color .15s ease;
-  }
-  .card:hover { transform: translateY(-3px); border-color: var(--blue); }
-  .card .ki {
-    width: 34px; height: 34px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.15rem;
-    margin-bottom: 12px;
-    background: rgba(47, 95, 224, 0.10);
-  }
-  .card h3 { margin: 0 0 4px; font-size: 1.1rem; font-weight: 700; }
-  .card p { margin: 0; font-size: 0.9rem; color: var(--ink-soft); }
-  .card .go { margin-top: 12px; font-size: 0.85rem; font-weight: 600; color: var(--blue); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
+  .marca { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .marca img { width: 40px; height: 40px; border-radius: 10px; }
+  .marca b { display: block; font-size: 0.98rem; letter-spacing: 0.14em; font-weight: 800; line-height: 1.1; }
+  .marca small { display: block; font-size: 0.68rem; letter-spacing: 0.2em; color: var(--gold); font-weight: 600; }
+  .links { display: none; gap: 28px; align-items: center; }
+  .links a { text-decoration: none; color: var(--ink-soft); font-size: 0.93rem; font-weight: 500; transition: color .2s; }
+  .links a:hover { color: var(--ink); }
+  @media (min-width: 860px) { .links { display: flex; } }
 
-  .cta {
-    text-align: center;
-    margin: clamp(40px, 9vw, 68px) 0 0;
+  /* Hero */
+  .hero { position: relative; padding: clamp(48px, 9vw, 104px) 0 clamp(56px, 8vw, 96px); background: radial-gradient(ellipse 80% 60% at 70% 0%, rgba(212, 175, 55, 0.10), transparent 70%), var(--bg); overflow: hidden; }
+  #red { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.15; pointer-events: none; }
+  .hero .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(44px, 6vw, 64px); align-items: center; }
+  .hero .wrap > * { min-width: 0; }
+  @media (min-width: 1000px) { .hero .wrap { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); } }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px;
+    border: 1px solid var(--line-hi); background: rgba(212, 175, 55, 0.06);
+    color: #E5C158; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.02em;
   }
-  .a-medida {
-    font-size: 0.95rem;
-    color: var(--ink-soft);
-    max-width: 38ch;
-    margin: 0 auto 22px;
-  }
-  .wa {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: #25d366;
-    color: #06231a;
-    font-weight: 700;
-    text-decoration: none;
-    padding: 13px 24px;
-    border-radius: 999px;
-    font-size: 1rem;
-  }
-  .wa svg { width: 20px; height: 20px; fill: currentColor; }
-  .cta small { display: block; margin-top: 12px; color: var(--ink-soft); font-size: 0.85rem; }
+  .badge .ic { width: 16px; height: 16px; }
+  h1 { font-size: clamp(2.1rem, 5.4vw, 3.6rem); line-height: 1.08; letter-spacing: -0.025em; font-weight: 800; margin: 22px 0 20px; }
+  .sub { font-size: clamp(1.02rem, 2vw, 1.15rem); color: var(--ink-soft); max-width: 56ch; margin: 0 0 32px; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 14px; }
+  @media (max-width: 520px) { .ctas .btn { width: 100%; } }
+  .confianza { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 28px; color: var(--ink-faint); font-size: 0.86rem; }
+  .confianza span { display: inline-flex; align-items: center; gap: 7px; }
+  .confianza .ic { width: 16px; height: 16px; color: var(--gold); stroke-width: 2.2; }
 
-  footer {
-    text-align: center;
-    margin-top: clamp(44px, 10vw, 72px);
-    color: var(--ink-soft);
-    font-size: 0.82rem;
+  /* Maqueta del panel */
+  .maqueta { position: relative; padding-bottom: 28px; }
+  .panel {
+    background: linear-gradient(180deg, #171717, #121212); border: 1px solid var(--line); border-radius: 20px;
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.02); overflow: hidden;
+  }
+  .panel-top { display: flex; align-items: center; gap: 7px; padding: 12px 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
+  .panel-top i { width: 9px; height: 9px; border-radius: 50%; background: #2a2a2a; }
+  .panel-top span { margin-left: 10px; font-size: 0.72rem; color: var(--ink-faint); }
+  .panel-body { display: grid; grid-template-columns: 52px 1fr; min-height: 330px; }
+  .panel-side { border-right: 1px solid rgba(255, 255, 255, 0.05); padding: 14px 0; display: flex; flex-direction: column; align-items: center; gap: 16px; color: var(--ink-faint); }
+  .panel-side .ic { width: 18px; height: 18px; }
+  .panel-side .on { color: var(--gold); }
+  .panel-main { padding: 16px; display: grid; gap: 12px; align-content: start; }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .kpi { background: #1b1b1b; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 10px 12px; }
+  .kpi small { display: block; font-size: 0.66rem; color: var(--ink-faint); }
+  .kpi b { font-size: 1.15rem; font-weight: 800; }
+  .kpi em { font-style: normal; font-size: 0.66rem; color: #E5C158; }
+  .grafico { background: #1b1b1b; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 12px 12px 10px; }
+  .grafico small { font-size: 0.68rem; color: var(--ink-faint); }
+  .barras { display: flex; align-items: flex-end; gap: 6px; height: 64px; margin-top: 8px; }
+  .barras i { flex: 1; border-radius: 4px 4px 2px 2px; background: linear-gradient(180deg, #E5C158, rgba(170, 124, 17, 0.35)); }
+  .consultas { display: grid; gap: 7px; }
+  .consulta { display: flex; align-items: center; gap: 10px; background: #1b1b1b; border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 8px 10px; font-size: 0.74rem; }
+  .avatar { width: 24px; height: 24px; border-radius: 50%; background: rgba(212, 175, 55, 0.16); color: #E5C158; display: grid; place-items: center; font-weight: 700; font-size: 0.66rem; flex: none; }
+  .consulta div { flex: 1; min-width: 0; }
+  .consulta b { display: block; font-weight: 600; }
+  .consulta span { color: var(--ink-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+  .tag { font-size: 0.62rem; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--line); color: #E5C158; white-space: nowrap; }
+  .tag.ia { background: rgba(212, 175, 55, 0.12); }
+  .celu {
+    position: absolute; right: -34px; bottom: -6px; width: 150px; border-radius: 26px; padding: 8px;
+    background: #0d0d0d; border: 1px solid rgba(229, 193, 88, 0.35); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.95), 0 0 40px -10px rgba(212, 175, 55, 0.25);
+  }
+  .celu-pantalla { border-radius: 19px; overflow: hidden; background: #141414; }
+  .celu-foto { height: 92px; background: radial-gradient(circle at 30% 30%, rgba(229, 193, 88, 0.45), transparent 60%), linear-gradient(135deg, #2a2418, #141414); }
+  .celu-txt { padding: 10px; display: grid; gap: 6px; }
+  .celu-txt i { display: block; height: 6px; border-radius: 3px; background: #2a2a2a; }
+  .celu-txt i:first-child { width: 70%; background: #3a3a3a; height: 8px; }
+  .celu-txt i:nth-child(3) { width: 55%; }
+  .celu-app { margin: 4px 10px 12px; padding: 7px; border-radius: 999px; background: var(--gold-grad); color: #0A0A0A; font-size: 0.6rem; font-weight: 800; text-align: center; }
+  @media (min-width: 561px) { .consultas { padding-right: 132px; } }
+  @media (max-width: 1099px) { .celu { right: -6px; } }
+  @media (max-width: 560px) { .consulta .tag { display: none; } .celu { width: 112px; right: -8px; } .celu-foto { height: 70px; } .kpis { grid-template-columns: repeat(2, 1fr); } .kpis .kpi:nth-child(3) { display: none; } }
+
+  /* Secciones */
+  section.bloque { padding: clamp(64px, 9vw, 112px) 0; }
+  .alt { background: var(--bg-2); border-top: 1px solid rgba(245, 158, 11, 0.08); border-bottom: 1px solid rgba(245, 158, 11, 0.08); }
+  .cabeza { text-align: center; max-width: 680px; margin: 0 auto clamp(36px, 5vw, 56px); }
+  .eyebrow { display: inline-block; font-size: 0.78rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin-bottom: 12px; }
+  h2 { font-size: clamp(1.7rem, 3.6vw, 2.5rem); line-height: 1.15; letter-spacing: -0.02em; margin: 0 0 14px; font-weight: 800; }
+  .cabeza p { color: var(--ink-soft); margin: 0; font-size: 1.05rem; }
+
+  .tarjeta {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+  }
+  .tarjeta:hover { border-color: var(--line-hi); box-shadow: var(--glow); transform: translateY(-3px); }
+
+  .pilares { display: grid; gap: 20px; }
+  @media (min-width: 860px) { .pilares { grid-template-columns: repeat(3, 1fr); } }
+  .pilar { padding: 32px 28px; }
+  .pilar-ic { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; color: #E5C158; background: rgba(212, 175, 55, 0.08); border: 1px solid var(--line); margin-bottom: 22px; }
+  .pilar-ic .ic { width: 26px; height: 26px; }
+  .pilar small { display: block; font-size: 0.78rem; letter-spacing: 0.2em; font-weight: 800; margin-bottom: 6px; }
+  .pilar h3 { font-size: 1.25rem; margin: 0 0 10px; font-weight: 700; }
+  .pilar p { color: var(--ink-soft); margin: 0 0 18px; }
+  .pilar ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 9px; }
+  .pilar li { display: flex; gap: 10px; font-size: 0.93rem; color: #d4d4d4; }
+  .pilar li .ic { width: 18px; height: 18px; color: var(--gold); stroke-width: 2.2; margin-top: 3px; }
+
+  .rubros { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 479px) {
+    .rubro { padding: 18px 16px; }
+    .rubro-ic { width: 38px; height: 38px; margin-bottom: 12px; }
+    .rubro h3 { font-size: 1rem; }
+    .rubro p { font-size: 0.84rem; margin-bottom: 12px; }
+  }
+  @media (min-width: 860px) { .rubros { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1100px) { .rubros { grid-template-columns: repeat(4, 1fr); } }
+  .rubro { display: flex; flex-direction: column; padding: 24px 22px; text-decoration: none; }
+  .rubro-ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; color: #E5C158; background: rgba(212, 175, 55, 0.07); border: 1px solid var(--line); margin-bottom: 16px; }
+  .rubro h3 { margin: 0 0 4px; font-size: 1.08rem; font-weight: 700; }
+  .rubro p { margin: 0 0 16px; color: var(--ink-soft); font-size: 0.9rem; }
+  .rubro .ver { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; font-weight: 700; color: #E5C158; }
+  .rubro .ver .ic { width: 16px; height: 16px; stroke-width: 2.2; transition: transform .2s ease; }
+  .rubro:hover .ver .ic { transform: translateX(4px); }
+  .rubro.otro { border-style: dashed; justify-content: center; }
+
+  .medida {
+    position: relative; overflow: hidden; border-radius: 24px; padding: clamp(32px, 5vw, 56px);
+    background: radial-gradient(ellipse 70% 90% at 100% 0%, rgba(212, 175, 55, 0.14), transparent 60%), var(--card);
+    border: 1px solid var(--line-hi); display: grid; gap: 28px; align-items: center;
+  }
+  @media (min-width: 860px) { .medida { grid-template-columns: 1.4fr 1fr; } }
+  .medida h2 { margin-bottom: 14px; }
+  .medida p { color: var(--ink-soft); margin: 0; font-size: 1.04rem; }
+  .medida ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .medida li { display: flex; gap: 12px; align-items: flex-start; color: #d4d4d4; }
+  .medida li .ic { color: var(--gold); width: 20px; height: 20px; stroke-width: 2.2; margin-top: 2px; }
+
+  .cierre { text-align: center; }
+  .cierre h2 { max-width: 22ch; margin: 0 auto 16px; }
+  .cierre p { color: var(--ink-soft); max-width: 52ch; margin: 0 auto 32px; font-size: 1.06rem; }
+  .cierre .btn { font-size: 1.05rem; padding: 17px 32px; }
+  @media (max-width: 520px) { .cierre .btn { width: 100%; } }
+
+  footer { border-top: 1px solid rgba(245, 158, 11, 0.12); padding: 28px 0 36px; color: var(--ink-faint); font-size: 0.84rem; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 10px 18px; justify-content: space-between; align-items: center; }
+  footer a { color: var(--ink-soft); text-decoration: none; }
+  footer a:hover { color: #E5C158; }
+
+  /* Aparición suave al hacer scroll */
+  .aparece { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+  .aparece.visto { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .aparece { opacity: 1; transform: none; transition: none; }
+    .tarjeta, .btn, .rubro .ver .ic { transition: none; }
   }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header>
-    <img class="logo" src="/logo-fronty.png" width="110" height="110" alt="FrontyBack">
-    <h1>Tu web, editable por vos</h1>
-    <p class="tagline">Editá tu web vos mismo, cuando quieras.</p>
-    <p class="pitch">
-      FrontyBack te arma un sitio web con un panel de administración propio: cambiás
-      textos, fotos, precios y novedades en el momento, sin llamar a nadie y sin pagar
-      cada modificación. Y tanto tu sitio como tu panel se instalan como una app en el
-      celular, sin pasar por ninguna tienda de aplicaciones.
-    </p>
-  </header>
+<header class="nav">
+  <div class="wrap">
+    <a class="marca" href="#inicio" aria-label="FrontyBack, inicio">
+      <img src="/logo-fronty.png" width="40" height="40" alt="">
+      <span><b>FRONTYBACK</b><small>WEB • CRM • IA</small></span>
+    </a>
+    <nav class="links" aria-label="Secciones">
+      <a href="#servicios">Servicios</a>
+      <a href="#rubros">Rubros</a>
+      <a href="#a-medida">A medida</a>
+    </nav>
+    <a class="btn btn-linea btn-chico" href="https://wa.me/5491162195243?text=Hola!%20Quiero%20armar%20mi%20demo%20de%20FrontyBack" target="_blank" rel="noopener">Pedir demo</a>
+  </div>
+</header>
 
-  <section class="demos">
-    <h2>Mirá un ejemplo de tu rubro</h2>
-    <div class="grid">
-      <a class="card" href="https://eventos.frontyback.com">
-        <div class="ki">🎉</div>
-        <h3>Eventos</h3>
-        <p>Salones y organización de fiestas.</p>
-        <div class="go">Ver demo →</div>
-      </a>
-      <a class="card" href="https://bares.frontyback.com">
-        <div class="ki">🍸</div>
-        <h3>Bares</h3>
-        <p>After office, tragos y música en vivo.</p>
-        <div class="go">Ver demo →</div>
-      </a>
-      <a class="card" href="https://cafes.frontyback.com">
-        <div class="ki">☕</div>
-        <h3>Cafés</h3>
-        <p>Cafeterías, brunch y pastelería.</p>
-        <div class="go">Ver demo →</div>
-      </a>
-      <a class="card" href="https://resto.frontyback.com">
-        <div class="ki">🍽️</div>
-        <h3>Restaurantes</h3>
-        <p>Cocina, carta y reservas.</p>
-        <div class="go">Ver demo →</div>
-      </a>
-      <a class="card" href="https://inmo.frontyback.com">
-        <div class="ki">🏢</div>
-        <h3>Inmobiliarias</h3>
-        <p>Emprendimientos, obra y precios.</p>
-        <div class="go">Ver demo →</div>
-      </a>
-      <a class="card" href="https://odont.frontyback.com">
-        <div class="ki">🦷</div>
-        <h3>Odontología</h3>
-        <p>Consultorios y clínicas dentales.</p>
-        <div class="go">Ver demo →</div>
-      </a>
-      <a class="card" href="https://abg.frontyback.com">
-        <div class="ki">⚖️</div>
-        <h3>Abogados</h3>
-        <p>Estudios jurídicos y asesoramiento legal.</p>
-        <div class="go">Ver demo →</div>
-      </a>
-      <a class="card" href="https://dr.frontyback.com">
-        <div class="ki">🩺</div>
-        <h3>Médicos</h3>
-        <p>Consultorios y clínicas médicas.</p>
-        <div class="go">Ver demo →</div>
-      </a>
-      <a class="card" href="https://cont.frontyback.com">
-        <div class="ki">📊</div>
-        <h3>Contadores</h3>
-        <p>Estudios contables e impositivos.</p>
-        <div class="go">Ver demo →</div>
-      </a>
-      <a class="card" href="https://gym.frontyback.com">
-        <div class="ki">🏋️</div>
-        <h3>Gimnasios</h3>
-        <p>Musculación, clases y planes.</p>
-        <div class="go">Ver demo →</div>
-      </a>
-      <a class="card" href="https://tiendas.frontyback.com">
-        <div class="ki">🛍️</div>
-        <h3>Tiendas</h3>
-        <p>Comercios y catálogo de productos.</p>
-        <div class="go">Ver demo →</div>
-      </a>
+<main id="inicio">
+  <section class="hero">
+    <canvas id="red" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div>
+        <span class="badge"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z" /> <path d="M20 3v4" /> <path d="M22 5h-4" /> <path d="M4 17v2" /> <path d="M5 18H3" /></svg> Tecnología todo-en-uno para negocios</span>
+        <h1>Tu web, tu <span class="oro">CRM</span> y tu <span class="oro">Inteligencia Artificial</span>. Todo bajo tu control.</h1>
+        <p class="sub">Creamos tu sitio web a medida con panel autogestionable e instalación tipo app, CRM integrado para tus ventas y automatizaciones con IA. Cambiá textos, precios y fotos vos mismo, sin depender de nadie.</p>
+        <div class="ctas">
+          <a class="btn btn-oro" href="https://wa.me/5491162195243?text=Hola!%20Quiero%20armar%20mi%20demo%20de%20FrontyBack" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg> Armar mi demo gratis por WhatsApp</a>
+          <a class="btn btn-linea" href="#rubros">Ver ejemplos por rubro</a>
+        </div>
+        <div class="confianza">
+          <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Sin plantillas cerradas</span>
+          <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Se instala como app</span>
+          <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Editás vos, sin pagar cada cambio</span>
+        </div>
+      </div>
+
+      <div class="maqueta" aria-label="Vista de ejemplo del panel de FrontyBack" role="img">
+        <div class="panel">
+          <div class="panel-top"><i></i><i></i><i></i><span>crm.frontyback.com</span></div>
+          <div class="panel-body">
+            <div class="panel-side">
+              <span class="on"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1" /> <rect width="7" height="5" x="14" y="3" rx="1" /> <rect width="7" height="9" x="14" y="12" rx="1" /> <rect width="7" height="5" x="3" y="16" rx="1" /></svg></span>
+              <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></span>
+              <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg></span>
+              <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8V4H8" /> <rect width="16" height="12" x="4" y="8" rx="2" /> <path d="M2 14h2" /> <path d="M20 14h2" /> <path d="M15 13v2" /> <path d="M9 13v2" /></svg></span>
+              <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9" /> <path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z" /></svg></span>
+            </div>
+            <div class="panel-main">
+              <div class="kpis">
+                <div class="kpi"><small>Consultas hoy</small><b>18</b> <em>+24%</em></div>
+                <div class="kpi"><small>Ventas del mes</small><b>42</b> <em>+12%</em></div>
+                <div class="kpi"><small>Respondidas</small><b>96%</b> <em>IA</em></div>
+              </div>
+              <div class="grafico">
+                <small>Consultas por semana</small>
+                <div class="barras">
+                  <i style="height:38%"></i><i style="height:52%"></i><i style="height:44%"></i><i style="height:63%"></i>
+                  <i style="height:58%"></i><i style="height:74%"></i><i style="height:69%"></i><i style="height:88%"></i>
+                  <i style="height:81%"></i><i style="height:100%"></i>
+                </div>
+              </div>
+              <div class="consultas">
+                <div class="consulta"><span class="avatar">LM</span><div><b>Laura M.</b><span>¿Tienen fecha libre el 14 de diciembre?</span></div><span class="tag ia">IA respondió</span></div>
+                <div class="consulta"><span class="avatar">JP</span><div><b>Juan P.</b><span>Quiero el plan anual del gimnasio</span></div><span class="tag">Web</span></div>
+                <div class="consulta"><span class="avatar">SR</span><div><b>Sofía R.</b><span>¿Cuánto sale el menú para 40 personas?</span></div><span class="tag">WhatsApp</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="celu" aria-hidden="true">
+          <div class="celu-pantalla">
+            <div class="celu-foto"></div>
+            <div class="celu-txt"><i></i><i></i><i></i></div>
+            <div class="celu-app">Instalar app</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="cta">
-    <p class="a-medida">¿Viste algo que te gusta en otra página? Lo desarrollamos y te lo sumamos a la tuya.</p>
-    <a class="wa" href="https://wa.me/5491162195243?text=Hola!%20Quiero%20info%20sobre%20FrontyBack" target="_blank" rel="noopener">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.02 3C9.4 3 4 8.36 4 15c0 2.36.68 4.56 1.86 6.42L4 29l7.77-1.83A11.9 11.9 0 0 0 16.02 27C22.63 27 28 21.64 28 15S22.63 3 16.02 3Zm6.94 16.98c-.3.85-1.72 1.63-2.38 1.7-.63.08-1.4.35-4.68-1.02-3.93-1.65-6.46-5.63-6.66-5.89-.19-.26-1.6-2.13-1.6-4.07 0-1.94.99-2.9 1.35-3.29.35-.4.77-.5 1.02-.5.26 0 .52 0 .74.01.24.02.56-.09.87.68.31.78 1.06 2.7 1.16 2.9.1.19.16.42.03.68-.13.26-.2.42-.4.65-.19.23-.41.51-.58.68-.19.19-.4.4-.17.79.23.4 1.02 1.72 2.2 2.79 1.51 1.38 2.78 1.81 3.17 2.01.4.19.63.16.87-.1.24-.26 1-1.19 1.27-1.6.26-.4.52-.33.87-.19.34.13 2.2 1.06 2.57 1.25.38.19.63.29.72.45.1.16.1.94-.2 1.8Z"/></svg>
-      Escribinos por WhatsApp
-    </a>
-    <small>Te respondemos y te armamos una demo con los datos de tu negocio.</small>
+  <section class="bloque alt" id="servicios">
+    <div class="wrap">
+      <div class="cabeza aparece">
+        <span class="eyebrow">Los 3 pilares de FrontyBack</span>
+        <h2>Todo lo que tu negocio necesita, <span class="oro">conectado</span></h2>
+        <p>Tu web, tus clientes y tus respuestas automáticas trabajan juntos, en un solo lugar.</p>
+      </div>
+      <div class="pilares">
+        <article class="tarjeta pilar aparece">
+          <div class="pilar-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" /> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /> <path d="M2 12h20" /></svg></div>
+          <small class="oro">WEB</small>
+          <h3>Editable por vos</h3>
+          <p>Panel propio para modificar textos, fotos y precios al instante.</p>
+          <ul>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Cambios en el momento, sin pagar cada modificación</li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Se instala como app en el celular, sin pasar por tiendas</li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Diseño a medida de tu rubro</li>
+          </ul>
+        </article>
+        <article class="tarjeta pilar aparece">
+          <div class="pilar-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <circle cx="9" cy="7" r="4" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg></div>
+          <small class="oro">CRM</small>
+          <h3>Gestión comercial</h3>
+          <p>Centralizá consultas, clientes y seguimiento de ventas, conectado directamente a tu sitio web.</p>
+          <ul>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Cada consulta de la web entra sola a tu CRM</li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Historial de cada cliente en un solo lugar</li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Seguimiento para que ninguna venta se pierda</li>
+          </ul>
+        </article>
+        <article class="tarjeta pilar aparece">
+          <div class="pilar-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8V4H8" /> <rect width="16" height="12" x="4" y="8" rx="2" /> <path d="M2 14h2" /> <path d="M20 14h2" /> <path d="M15 13v2" /> <path d="M9 13v2" /></svg></div>
+          <small class="oro">IA</small>
+          <h3>Inteligencia artificial</h3>
+          <p>Automatizá respuestas, optimizá procesos y tomá mejores decisiones con asistentes adaptados a tu negocio.</p>
+          <ul>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Respuestas automáticas a las consultas frecuentes</li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Asistentes entrenados con la información de tu negocio</li>
+            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg> Menos tareas repetitivas, más tiempo para vender</li>
+          </ul>
+        </article>
+      </div>
+    </div>
   </section>
 
-  <footer>FrontyBack, operado por Hugo José Ceriani · <span id="y"></span> · <a href="/privacidad" style="color: inherit;">Privacidad</a> · <a href="/terminos" style="color: inherit;">Términos</a></footer>
-</div>
-<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <section class="bloque" id="rubros">
+    <div class="wrap">
+      <div class="cabeza aparece">
+        <span class="eyebrow">Demos reales</span>
+        <h2>Mirá un ejemplo de <span class="oro">tu rubro</span></h2>
+        <p>Entrá a la demo, recorrela como si fueras tu cliente y pedí la tuya con tus datos.</p>
+      </div>
+      <div class="rubros">
+        <a class="tarjeta rubro aparece" href="https://eventos.frontyback.com">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.8 11.3 2 22l10.7-3.79" /> <path d="M4 3h.01" /> <path d="M22 8h.01" /> <path d="M15 2h.01" /> <path d="M22 20h.01" /> <path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10" /> <path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17" /> <path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7" /> <path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z" /></svg></div>
+          <h3>Eventos</h3>
+          <p>Salones y organización de fiestas.</p>
+          <span class="ver">Ver demo <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+        <a class="tarjeta rubro aparece" href="https://bares.frontyback.com">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 22h8" /> <path d="M12 11v11" /> <path d="m19 3-7 8-7-8Z" /></svg></div>
+          <h3>Bares</h3>
+          <p>After office, tragos y música en vivo.</p>
+          <span class="ver">Ver demo <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+        <a class="tarjeta rubro aparece" href="https://cafes.frontyback.com">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2v2" /> <path d="M14 2v2" /> <path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" /> <path d="M6 2v2" /></svg></div>
+          <h3>Cafés</h3>
+          <p>Cafeterías, brunch y pastelería.</p>
+          <span class="ver">Ver demo <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+        <a class="tarjeta rubro aparece" href="https://resto.frontyback.com">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8" /> <path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c.7.7 2 .7 2.8 0L15 15Zm0 0 7 7" /> <path d="m2.1 21.8 6.4-6.3" /> <path d="m19 5-7 7" /></svg></div>
+          <h3>Restaurantes</h3>
+          <p>Cocina, carta y reservas.</p>
+          <span class="ver">Ver demo <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+        <a class="tarjeta rubro aparece" href="https://inmo.frontyback.com">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" /> <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" /> <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" /> <path d="M10 6h4" /> <path d="M10 10h4" /> <path d="M10 14h4" /> <path d="M10 18h4" /></svg></div>
+          <h3>Inmobiliarias</h3>
+          <p>Emprendimientos, obra y precios.</p>
+          <span class="ver">Ver demo <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+        <a class="tarjeta rubro aparece" href="https://odont.frontyback.com">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" /> <path d="M8 14s1.5 2 4 2 4-2 4-2" /> <line x1="9" x2="9.01" y1="9" y2="9" /> <line x1="15" x2="15.01" y1="9" y2="9" /></svg></div>
+          <h3>Odontología</h3>
+          <p>Consultorios y clínicas dentales.</p>
+          <span class="ver">Ver demo <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+        <a class="tarjeta rubro aparece" href="https://abg.frontyback.com">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /> <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" /> <path d="M7 21h10" /> <path d="M12 3v18" /> <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" /></svg></div>
+          <h3>Abogados</h3>
+          <p>Estudios jurídicos y asesoramiento legal.</p>
+          <span class="ver">Ver demo <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+        <a class="tarjeta rubro aparece" href="https://dr.frontyback.com">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 2v2" /> <path d="M5 2v2" /> <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" /> <path d="M8 15a6 6 0 0 0 12 0v-3" /> <circle cx="20" cy="10" r="2" /></svg></div>
+          <h3>Médicos</h3>
+          <p>Consultorios y clínicas médicas.</p>
+          <span class="ver">Ver demo <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+        <a class="tarjeta rubro aparece" href="https://cont.frontyback.com">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /></svg></div>
+          <h3>Contadores</h3>
+          <p>Estudios contables e impositivos.</p>
+          <span class="ver">Ver demo <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+        <a class="tarjeta rubro aparece" href="https://gym.frontyback.com">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.4 14.4 9.6 9.6" /> <path d="M18.657 21.485a2 2 0 1 1-2.829-2.828l-1.767 1.768a2 2 0 1 1-2.829-2.829l6.364-6.364a2 2 0 1 1 2.829 2.829l-1.768 1.767a2 2 0 1 1 2.828 2.829z" /> <path d="m21.5 21.5-1.4-1.4" /> <path d="M3.9 3.9 2.5 2.5" /> <path d="M6.404 12.768a2 2 0 1 1-2.829-2.829l1.768-1.767a2 2 0 1 1-2.828-2.829l2.828-2.828a2 2 0 1 1 2.829 2.828l1.767-1.768a2 2 0 1 1 2.829 2.829z" /></svg></div>
+          <h3>Gimnasios</h3>
+          <p>Musculación, clases y planes.</p>
+          <span class="ver">Ver demo <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+        <a class="tarjeta rubro aparece" href="https://tiendas.frontyback.com">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" /> <path d="M3 6h18" /> <path d="M16 10a4 4 0 0 1-8 0" /></svg></div>
+          <h3>Tiendas</h3>
+          <p>Comercios y catálogo de productos.</p>
+          <span class="ver">Ver demo <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+        <a class="tarjeta rubro otro aparece" href="https://wa.me/5491162195243?text=Hola!%20Quiero%20armar%20mi%20demo%20de%20FrontyBack" target="_blank" rel="noopener">
+          <div class="rubro-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72" /> <path d="m14 7 3 3" /> <path d="M5 6v4" /> <path d="M19 14v4" /> <path d="M10 2v2" /> <path d="M7 8H3" /> <path d="M21 16h-4" /> <path d="M11 3H9" /></svg></div>
+          <h3>¿Tu rubro no está?</h3>
+          <p>Lo armamos igual, a la medida de tu negocio.</p>
+          <span class="ver">Consultanos <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="m12 5 7 7-7 7" /></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque alt" id="a-medida">
+    <div class="wrap">
+      <div class="medida aparece">
+        <div>
+          <span class="eyebrow">Desarrollo a medida</span>
+          <h2>¿Viste algo que te gusta en otra página? <span class="oro">Lo desarrollamos y te lo sumamos a la tuya.</span></h2>
+          <p>No usamos plantillas cerradas: cada sitio se programa para tu negocio, así que siempre se puede sumar una función nueva cuando la necesites.</p>
+        </div>
+        <ul>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></svg> Reservas, turnos, catálogos o formularios a medida</li>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /></svg> Todo funciona igual en el celular y en la compu</li>
+          <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9" /> <path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z" /></svg> Lo nuevo también lo editás vos desde tu panel</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque cierre">
+    <div class="wrap aparece">
+      <span class="eyebrow">Empezá hoy</span>
+      <h2>Tu demo, con los datos <span class="oro">reales de tu negocio</span></h2>
+      <p>Escribinos por WhatsApp. Te respondemos y te armamos una demo con los datos reales de tu negocio.</p>
+      <a class="btn btn-oro" href="https://wa.me/5491162195243?text=Hola!%20Quiero%20armar%20mi%20demo%20de%20FrontyBack" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></svg> Escribinos por WhatsApp</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>FrontyBack, operado por Hugo José Ceriani · <span id="y">2026</span></span>
+    <span><a href="/privacidad">Privacidad</a> · <a href="/terminos">Términos</a></span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  // Aparición suave de las secciones
+  const vistos = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('visto'); vistos.unobserve(e.target); } }), { threshold: 0.12 });
+  document.querySelectorAll('.aparece').forEach((el) => vistos.observe(el));
+
+  // Red de nodos dorada del fondo (estática: se dibuja una vez y al cambiar el tamaño)
+  const lienzo = document.getElementById('red');
+  function dibujarRed() {
+    const r = lienzo.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    lienzo.width = r.width * dpr; lienzo.height = r.height * dpr;
+    const c = lienzo.getContext('2d'); c.scale(dpr, dpr);
+    let s = 7; const azar = () => (s = (s * 16807) % 2147483647) / 2147483647;
+    const n = Math.round(Math.min(110, r.width * r.height / 9000));
+    const puntos = Array.from({ length: n }, () => [azar() * r.width, azar() * r.height, 0.8 + azar() * 1.8]);
+    const d = Math.min(170, r.width / 6);
+    c.strokeStyle = '#D4AF37'; c.fillStyle = '#E5C158';
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+      const dx = puntos[i][0] - puntos[j][0], dy = puntos[i][1] - puntos[j][1], dist = Math.hypot(dx, dy);
+      if (dist < d) { c.globalAlpha = 1 - dist / d; c.lineWidth = 0.8; c.beginPath(); c.moveTo(puntos[i][0], puntos[i][1]); c.lineTo(puntos[j][0], puntos[j][1]); c.stroke(); }
+    }
+    c.globalAlpha = 1;
+    puntos.forEach(([x, y, t]) => { c.beginPath(); c.arc(x, y, t, 0, Math.PI * 2); c.fill(); });
+  }
+  dibujarRed();
+  let espera; window.addEventListener('resize', () => { clearTimeout(espera); espera = setTimeout(dibujarRed, 150); });
+</script>
 </body>
 </html>
