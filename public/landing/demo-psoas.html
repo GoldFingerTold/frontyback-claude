@@ -79,6 +79,9 @@
   h2 { font-family: var(--serif); font-weight: 500; font-size: clamp(2rem, 4.6vw, 3rem); line-height: 1.08; margin: 0 0 12px; }
   .cabeza p { color: var(--ink-soft); margin: 0; }
 
+  .franja { margin: 0 0 28px; border-radius: 26px; overflow: hidden; aspect-ratio: 21 / 9; box-shadow: 0 30px 60px -34px rgba(43, 37, 34, 0.55); background: var(--bg); }
+  .franja img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; display: block; }
+  @media (max-width: 640px) { .franja { aspect-ratio: 4 / 3; border-radius: 20px; } }
   .clases { display: grid; gap: 18px; }
   @media (min-width: 700px) { .clases { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (min-width: 1000px) { .clases { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
@@ -191,6 +194,9 @@
         <h2>Encontrá la clase que va con vos</h2>
         <p>Grupos reducidos para que cada alumno tenga la atención que necesita.</p>
       </div>
+      <figure class="franja aparece">
+        <img src="/demo-psoas/clase-grupal.webp" width="1800" height="1200" loading="lazy" alt="Clase grupal de pilates en camas reformer, en un estudio luminoso">
+      </figure>
       <div class="clases">
         <article class="clase aparece"><div class="num">01</div><h3>Pilates Reformer</h3><p>Trabajo con máquina para fortalecer y alinear todo el cuerpo, con resistencia adaptada a tu nivel.</p></article>
         <article class="clase aparece"><div class="num">02</div><h3>Pilates Mat</h3><p>Clase en colchoneta enfocada en el centro del cuerpo, la respiración y el control del movimiento.</p></article>
