@@ -37,6 +37,94 @@
   ]
 }
 </script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Qué incluye FrontyBack?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Tu sitio web a medida con un panel propio para editarlo, un CRM que reúne las consultas que te llegan por la web y por WhatsApp, y respuestas automáticas con inteligencia artificial. Podés empezar solo con la web y sumar el resto cuando lo necesites."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Puedo cambiar los textos, las fotos y los precios yo mismo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí. Tu web tiene un panel propio: entrás desde la compu o el celular y cambiás lo que quieras en el momento, sin llamar a nadie y sin pagar cada modificación."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cómo funciona la demo gratis?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nos escribís por WhatsApp, nos contás de tu negocio y te armamos una demo gratis y sin compromiso con tus datos reales: tu nombre, tus fotos y tus servicios. Así ves cómo quedaría antes de decidir."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuánto tarda en estar lista mi web?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Alrededor de 7 días."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Cuánto cuesta? ¿Hay que pagar todos los meses?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, es un abono mensual. El precio depende de lo que necesites, y te lo pasamos junto con la demo."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿El dominio y el hosting están incluidos?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "El hosting está incluido y el dominio (tunegocio.com) se paga aparte. Si ya tenés tu propio hosting, publicamos la web ahí, pero en ese caso no podemos hacernos cargo de las fallas que tenga ese servicio."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Ya tengo una web, ¿me sirve igual?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí, elegís vos: te quedás con tu web y la conectamos al CRM para que las consultas te entren solas, o te hacemos una nueva con panel propio. En los dos casos también podemos mejorar cómo te muestran Google y las inteligencias artificiales (SEO y AEO)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué hace la inteligencia artificial?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Responde automáticamente las consultas que te llegan por WhatsApp apenas te escriben, a cualquier hora, con la información de tu negocio. Así nadie se queda esperando y vos ves todo ordenado en el CRM."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Se instala como una app en el celular?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí. Tu web y tu panel se instalan en el celular desde el navegador, con su propio ícono, sin pasar por ninguna tienda de aplicaciones."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Trabajan con negocios de cualquier rubro?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sí. Arriba vas a ver demos de 11 rubros, y si el tuyo no está, lo armamos igual a la medida de tu negocio."
+      }
+    }
+  ]
+}
+</script>
 <style>
   /* Landing de marca: siempre oscura (decisión de Hugo). Negro mate + oro pulido. */
   :root {
@@ -222,6 +310,18 @@
   .medida li { display: flex; gap: 12px; align-items: flex-start; color: #d4d4d4; }
   .medida li .ic { color: var(--gold); width: 20px; height: 20px; stroke-width: 2.2; margin-top: 2px; }
 
+  .faq { max-width: 820px; margin: 0 auto; display: grid; gap: 12px; }
+  .faq details { background: var(--card); border: 1px solid var(--line); border-radius: 16px; transition: border-color .25s ease, box-shadow .25s ease; }
+  .faq details:hover, .faq details[open] { border-color: var(--line-hi); }
+  .faq details[open] { box-shadow: var(--glow); }
+  .faq summary {
+    list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 20px 22px; font-weight: 700; font-size: 1.02rem;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary .ic { width: 20px; height: 20px; color: var(--gold); stroke-width: 2; transition: transform .25s ease; }
+  .faq details[open] summary .ic { transform: rotate(45deg); }
+  .faq details p { margin: 0; padding: 0 22px 20px; color: var(--ink-soft); }
   .cierre { text-align: center; }
   .cierre h2 { max-width: 22ch; margin: 0 auto 16px; }
   .cierre p { color: var(--ink-soft); max-width: 52ch; margin: 0 auto 32px; font-size: 1.06rem; }
@@ -321,6 +421,7 @@
       <a href="#servicios">Servicios</a>
       <a href="#rubros">Rubros</a>
       <a href="#a-medida">A medida</a>
+      <a href="#preguntas">Preguntas</a>
     </nav>
     <a class="btn btn-linea btn-chico" href="https://wa.me/5491162195243?text=Hola!%20Quiero%20armar%20mi%20demo%20de%20FrontyBack" target="_blank" rel="noopener">Pedir demo</a>
   </div>
@@ -536,7 +637,58 @@
     </div>
   </section>
 
-  <section class="bloque cierre">
+  <section class="bloque" id="preguntas">
+    <div class="wrap">
+      <div class="cabeza aparece">
+        <span class="eyebrow">Preguntas frecuentes</span>
+        <h2>Lo que más nos <span class="oro">preguntan</span></h2>
+      </div>
+      <div class="faq">
+        <details class="aparece">
+          <summary>¿Qué incluye FrontyBack? <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg></summary>
+          <p>Tu sitio web a medida con un panel propio para editarlo, un CRM que reúne las consultas que te llegan por la web y por WhatsApp, y respuestas automáticas con inteligencia artificial. Podés empezar solo con la web y sumar el resto cuando lo necesites.</p>
+        </details>
+        <details class="aparece">
+          <summary>¿Puedo cambiar los textos, las fotos y los precios yo mismo? <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg></summary>
+          <p>Sí. Tu web tiene un panel propio: entrás desde la compu o el celular y cambiás lo que quieras en el momento, sin llamar a nadie y sin pagar cada modificación.</p>
+        </details>
+        <details class="aparece">
+          <summary>¿Cómo funciona la demo gratis? <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg></summary>
+          <p>Nos escribís por WhatsApp, nos contás de tu negocio y te armamos una demo gratis y sin compromiso con tus datos reales: tu nombre, tus fotos y tus servicios. Así ves cómo quedaría antes de decidir.</p>
+        </details>
+        <details class="aparece">
+          <summary>¿Cuánto tarda en estar lista mi web? <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg></summary>
+          <p>Alrededor de 7 días.</p>
+        </details>
+        <details class="aparece">
+          <summary>¿Cuánto cuesta? ¿Hay que pagar todos los meses? <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg></summary>
+          <p>Sí, es un abono mensual. El precio depende de lo que necesites, y te lo pasamos junto con la demo.</p>
+        </details>
+        <details class="aparece">
+          <summary>¿El dominio y el hosting están incluidos? <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg></summary>
+          <p>El hosting está incluido y el dominio (tunegocio.com) se paga aparte. Si ya tenés tu propio hosting, publicamos la web ahí, pero en ese caso no podemos hacernos cargo de las fallas que tenga ese servicio.</p>
+        </details>
+        <details class="aparece">
+          <summary>Ya tengo una web, ¿me sirve igual? <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg></summary>
+          <p>Sí, elegís vos: te quedás con tu web y la conectamos al CRM para que las consultas te entren solas, o te hacemos una nueva con panel propio. En los dos casos también podemos mejorar cómo te muestran Google y las inteligencias artificiales (SEO y AEO).</p>
+        </details>
+        <details class="aparece">
+          <summary>¿Qué hace la inteligencia artificial? <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg></summary>
+          <p>Responde automáticamente las consultas que te llegan por WhatsApp apenas te escriben, a cualquier hora, con la información de tu negocio. Así nadie se queda esperando y vos ves todo ordenado en el CRM.</p>
+        </details>
+        <details class="aparece">
+          <summary>¿Se instala como una app en el celular? <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg></summary>
+          <p>Sí. Tu web y tu panel se instalan en el celular desde el navegador, con su propio ícono, sin pasar por ninguna tienda de aplicaciones.</p>
+        </details>
+        <details class="aparece">
+          <summary>¿Trabajan con negocios de cualquier rubro? <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /> <path d="M12 5v14" /></svg></summary>
+          <p>Sí. Arriba vas a ver demos de 11 rubros, y si el tuyo no está, lo armamos igual a la medida de tu negocio.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque cierre alt">
     <div class="wrap aparece">
       <span class="eyebrow">Empezá hoy</span>
       <h2>Tu demo, con los datos <span class="oro">reales de tu negocio</span></h2>
