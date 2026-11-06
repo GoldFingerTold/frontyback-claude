@@ -63,9 +63,10 @@
   @media (max-width: 520px) { .acciones .btn { width: 100%; } }
 
   /* Ilustración: arcos que evocan el movimiento y la columna */
-  .arte { position: relative; aspect-ratio: 1 / 1; max-width: 460px; width: 100%; margin: 0 auto; }
-  .arte .sol { position: absolute; inset: 8%; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #F2CDB4, #D99A77 55%, #B4704F); }
-  .arte svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .arte { position: relative; aspect-ratio: 4 / 5; max-width: 440px; width: 100%; margin: 0 auto; }
+  .arte .foto { position: absolute; inset: 0 0 6% 6%; border-radius: 999px 999px 28px 28px; overflow: hidden; box-shadow: 0 30px 60px -30px rgba(43, 37, 34, 0.55); background: var(--bg-2); }
+  .arte .foto img { width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%; display: block; }
+  .arte::before { content: ""; position: absolute; inset: 6% 6% 0 0; border-radius: 999px 999px 28px 28px; border: 1.5px solid rgba(180, 112, 79, 0.45); }
   .arte .sello {
     position: absolute; right: 2%; bottom: 6%; background: var(--card); border-radius: 18px; padding: 14px 18px;
     box-shadow: 0 18px 40px -18px rgba(43, 37, 34, 0.45); font-size: 0.85rem; max-width: 210px;
@@ -176,14 +177,8 @@
           <a class="btn btn-linea" href="#clases">Conocé las clases</a>
         </div>
       </div>
-      <div class="arte" aria-hidden="true">
-        <div class="sol"></div>
-        <svg viewBox="0 0 400 400" fill="none" stroke="#F6F1EA" stroke-linecap="round">
-          <path d="M70 290 C 130 170, 270 170, 330 290" stroke-width="3" opacity=".9"/>
-          <path d="M95 300 C 150 205, 250 205, 305 300" stroke-width="2" opacity=".6"/>
-          <path d="M120 310 C 165 240, 235 240, 280 310" stroke-width="1.5" opacity=".4"/>
-          <circle cx="200" cy="150" r="10" fill="#F6F1EA" stroke="none" opacity=".9"/>
-        </svg>
+      <div class="arte">
+        <div class="foto"><img src="/demo-psoas/reformer.webp" width="1600" height="900" alt="Clase de pilates en camas reformer en un estudio luminoso"></div>
         <div class="sello"><b>Tu primera clase</b>es de prueba: vení a conocernos.</div>
       </div>
     </div>
